@@ -85,9 +85,9 @@ A failure to comply may result in your code be rejected or even being taken out 
 
 ## Naming Scheme
 
-Please use the following naming conventions when writing and submitting code, changes which do not follow be **may not be accepted**:
+Please use the following naming conventions when writing and submitting code, changes which do not follow **may not be accepted**:
 - Variable Name: *camelCase*
-- Private Fields: *\_camelCase* with the prefix \_
+- Private Fields:  *\_camelCase* with the prefix \_
 - Methods/Properties: *PascalCase*
 - Classes/Interfaces: *PascalCase*
 - Files: *PascalCase*

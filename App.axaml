@@ -11,5 +11,50 @@
   
     <Application.Styles>
         <FluentTheme />
+        
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="MinHeight" Value="36"/>
+            
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#3A3A3A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            
+        </Style>
+        
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="#3A3A3A"/>
+            <Setter Property="BorderBrush" Value="#505050"/>
+        </Style>
+
+        <Style Selector="Button:pressed">
+            <Setter Property="Background" Value="#1F1F1F"/>
+            <Setter Property="BorderBrush" Value="#666666"/>
+        </Style>
+        
+        <Style Selector="Button.dark:disabled">
+            <Setter Property="Background" Value="#1E1E1E"/>
+            <Setter Property="Foreground" Value="#777777"/>
+            <Setter Property="BorderBrush" Value="#2A2A2A"/>
+            <Setter Property="Opacity" Value="0.6"/>
+        </Style>
+        
     </Application.Styles>
+             
+    <Application.Resources>
+        <x:Double x:Key="HeadingSize">24</x:Double>
+        <x:Double x:Key="SubheadingSize">18</x:Double>
+        <x:Double x:Key="BodySize">14</x:Double>
+        
+        <Thickness x:Key="DefaultMargin">8</Thickness>
+        <Thickness x:Key="PagePadding">16</Thickness>
+        
+        
+    </Application.Resources>
+             
 </Application>

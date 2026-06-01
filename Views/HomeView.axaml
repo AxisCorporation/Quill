@@ -6,15 +6,39 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Quill.Views.HomeView"
              x:DataType="vm:HomeViewModel">
-    <Grid ColumnDefinitions="150, *">
-        <StackPanel Grid.Column="0" Spacing="10" Margin="10">
-            <Button Content="New Document" Command="{Binding NewFile}"></Button>
-            <Button Content="Open File" Command="{Binding NewFile}"></Button>
-            <Button Content="Settings" Command="{Binding NewFile}"></Button>
-        </StackPanel>
+    <Grid ColumnDefinitions="180, *">
         
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Width="180"
+                Background="#1E1E1E"
+                BorderBrush="#2A2A2A"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto, *, Auto">
+                <!-- Top Section -->
+                <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
+                    <Button Content="New Document"
+                            Command="{Binding NewFile}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                    <Button Content="Open File"
+                            Command="{Binding NewFile}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                </StackPanel>
+                
+                <!-- Bottom Section -->
+                <StackPanel Grid.Row="2" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
+                    <Button Content="Settings"
+                            Command="{Binding NewFile}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Main Page -->
         <StackPanel Grid.Column="1" Margin="10" Spacing="10">
-            <TextBlock Text="Recent Documents" FontSize="20" FontWeight="Bold"></TextBlock>
+            <TextBlock Text="Recent Documents" FontSize="{StaticResource HeadingSize}" FontWeight="Bold"></TextBlock>
             
             <ItemsControl ItemsSource="{Binding RecentDocuments}">
                 <ItemsControl.ItemTemplate>
@@ -27,7 +51,9 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            
             <TextBlock Text="{Binding Debug}"></TextBlock>
         </StackPanel>
+        
     </Grid>
 </UserControl>

@@ -2,7 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Quill.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Quill.Views.Home">
-    Welcome to Avalonia!
+             x:Class="Quill.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+    <TextBlock Text="{Binding Greeting}"></TextBlock>
 </UserControl>

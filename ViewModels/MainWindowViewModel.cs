@@ -1,12 +1,20 @@
-﻿namespace Quill.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace Quill.ViewModels;
+
+public partial class MainWindowViewModel : ViewModelBase, INavigation
 {
-    public object CurrentView { get; }
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    [ObservableProperty]
+    private ViewModelBase _currentView;
     
     public MainWindowViewModel()
     {
-        CurrentView = new HomeViewModel();
+        CurrentView = new HomeViewModel(this);
+    }
+    
+    public void Navigate(ViewModelBase vm)
+    {
+        CurrentView = vm;
     }
 }

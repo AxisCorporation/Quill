@@ -17,6 +17,10 @@
             <Setter Property="Background" Value="{DynamicResource Color.Background}" />
         </Style>
         
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+        </Style>
+        
         <Style Selector="Button">
             <Setter Property="Margin" Value="8"/>
             <Setter Property="MinHeight" Value="36"/>

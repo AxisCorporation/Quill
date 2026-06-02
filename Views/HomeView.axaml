@@ -10,8 +10,8 @@
         
         <!-- Sidebar -->
         <Border Grid.Column="0" Width="180"
-                Background="#1E1E1E"
-                BorderBrush="#2A2A2A"
+                Background="{StaticResource Color.SurfaceAlt}"
+                BorderBrush="{StaticResource Color.SurfaceAlt}"
                 BorderThickness="0,0,1,0">
             <Grid RowDefinitions="Auto, *, Auto">
                 <!-- Top Section -->

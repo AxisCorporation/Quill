@@ -37,10 +37,16 @@
         </Border>
         
         <!-- Main Page -->
-        <StackPanel Grid.Column="1" Margin="10" Spacing="10">
+        <StackPanel Grid.Column="1" Margin="10" Spacing="10" HorizontalAlignment="Stretch">
             <TextBlock Text="Recent Documents" FontSize="{StaticResource HeadingSize}" FontWeight="Bold"></TextBlock>
             
             <ItemsControl ItemsSource="{Binding RecentDocuments}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="8"

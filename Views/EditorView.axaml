@@ -4,5 +4,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Quill.Views.EditorView">
-    Welcome to Avalonia!
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open..."/>
+                    <Separator/>
+                    <MenuItem Header="_Exit"/>
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="Copy"/>
+                    <MenuItem Header="Paste"/>
+                </MenuItem>
+            </Menu>
+            <TextBlock/>
+        </DockPanel>
+        
+        <Border Grid.Row="1" Margin="2" Background="SlateGray" CornerRadius="15">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="New"/>
+                <Button Content="Open"/>
+                <Button Content="Save"/>
+
+                <Button Content="B"
+                        FontWeight="Bold"/>
+
+                <Button Content="I"
+                        FontStyle="Italic"/>
+
+                <Button Content="U"/>
+
+                <Button Content="⯇"/>
+                <Button Content="≡"/>
+                <Button Content="⯈"/>
+
+                <ComboBox Width="150"
+                          SelectedIndex="0" VerticalAlignment="Center">
+                    <ComboBoxItem Content="Arial"/>
+                    <ComboBoxItem Content="Times New Roman"/>
+                    <ComboBoxItem Content="Calibri"/>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        
+    </Grid>
 </UserControl>

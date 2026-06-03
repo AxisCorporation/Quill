@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Quill.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Quill.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+    <Grid ColumnDefinitions="180, *">
+        
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Width="180"
+                Background="{StaticResource Color.SurfaceAlt}"
+                BorderBrush="{StaticResource Color.SurfaceAlt}"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto, *, Auto">
+                <!-- Top Section -->
+                <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
+                    <Button Content="New Document"
+                            Command="{Binding GoToEditorCommand}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                    <Button Content="Open File"
+                            Command="{Binding NewFileCommand}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                </StackPanel>
+                
+                <!-- Bottom Section -->
+                <StackPanel Grid.Row="2" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
+                    <Button Content="Settings"
+                            Command="{Binding NewFileCommand}"
+                            HorizontalContentAlignment="Center"
+                            HorizontalAlignment="Center"></Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Main Page -->
+        <StackPanel Grid.Column="1" Margin="10" Spacing="10">
+            <TextBlock Text="Recent Documents" FontSize="{StaticResource HeadingSize}" FontWeight="Bold"></TextBlock>
+            
+            <ItemsControl ItemsSource="{Binding RecentDocuments}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="8"
+                                Margin="4"
+                                Background="#222">
+                            <TextBlock Text="{Binding}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <TextBlock Text="{Binding Debug}"></TextBlock>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

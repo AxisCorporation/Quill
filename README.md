@@ -1,7 +1,7 @@
 # Quill
 **Admin Access**: Zain Farhan
 
-This Repo is owned and maintained by some CS (mostly LUMS) students for the purposes of using it for their Summer Project. This is a Word processor build from scratch using the Avalonia UI with the .NET framework.
+This Repo is owned and maintained by some CS (mostly LUMS) students for the purposes of using it for their Summer Project. This is a Word processor build from scratch using the Avalonia UI with the .NET Framework.
 
 ## Table of Contends
 
@@ -14,7 +14,7 @@ This Repo is owned and maintained by some CS (mostly LUMS) students for the purp
 
 ## Introduction
 
-The aim of Quill is to be a lightweight and simple word processor so people like students, teacher, and office workers can use it to make simple documents. Below are the features that we have potentially planned for the project and those that are currently avalible.
+The aim of Quill is to be a lightweight and simple word processor so people like students, teacher, and office workers can use it to make simple documents. Below are the features that we have potentially planned for the project and those that are currently available.
 
 ### Objectives
 
@@ -36,7 +36,7 @@ Please make sure you have all the required tools installed and ready:
 
 ### MVVM Paradigm
 
-MVVM stands for Model–View–ViewModel. It’s a design pattern used to organize code, especially in apps with a user interface (like mobile or desktop apps). It helps separate the logic of your app (how it works) from the way it looks. For example, let's say we are building a weather app.
+MVVM stands for Model–View–ViewModel. It’s a design pattern used to organise code, especially in apps with a user interface (like mobile or desktop apps). It helps separate the logic of your app (how it works) from the way it looks. For example, let's say we are building a weather app.
 
 MVVM breaks this into 3 parts:
 

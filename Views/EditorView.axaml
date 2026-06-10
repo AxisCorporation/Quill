@@ -23,11 +23,10 @@
         <!--     <TextBlock/> -->
         <!-- </DockPanel> -->
         
-        <Border Grid.Row="1" Margin="2" Background="SlateGray" CornerRadius="15">
+        <Border Grid.Row="0" Margin="2" Background="SlateGray" CornerRadius="15">
             <Grid ColumnDefinitions="auto, 1, *, 1, *, 1, *"
                   
                   ColumnSpacing="12">
-                  
 
                 <StackPanel Grid.Column="0" Margin="4" 
                             Orientation="Horizontal" 
@@ -68,6 +67,7 @@
 
                     <TextBlock Text="Font"
                                HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
                                FontSize="11"
                                Opacity="0.7"/>
                 </StackPanel>
@@ -77,11 +77,13 @@
                         Margin="4"/>
                 
                 <!-- Paragraph -->
-                <StackPanel Grid.Column="4"
-                            Spacing="4">
+                <Grid Grid.Column="4"
+                            RowDefinitions="*, auto"
+                            Margin="4">
 
                     <StackPanel Orientation="Horizontal"
-                                Spacing="4">
+                                Spacing="4"
+                                VerticalAlignment="Top">
 
                         <Button Content="⯇"/>
                         <Button Content="≡"/>
@@ -93,9 +95,10 @@
 
                     <TextBlock Text="Paragraph"
                                HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
                                FontSize="11"
                                Opacity="0.7"/>
-                </StackPanel>
+                </Grid>
                 
                 
                 <Border Grid.Column="5" Width="1"

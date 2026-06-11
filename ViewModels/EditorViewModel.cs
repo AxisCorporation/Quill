@@ -21,15 +21,19 @@ public partial class EditorViewModel : ViewModelBase
     public partial bool ShowSavePanel { get; set; } 
 
     // This is the same as the file path in TextDocument.CurrentFilePath
+    // This should not be changed in code manually
     [ObservableProperty]
-    public partial string? CurrentFilePath { get; set; } 
+    public partial string? ObservableFilePath { get; private set; } 
+
+    [ObservableProperty]
+    public partial FileType FileExtension { get; set; } = FileType.wrt;
 
     [RelayCommand]
     private void GoToHome()
     {
         MainWindowViewModel.Navigate(new HomeViewModel());
 
-        TextDocument.FilePathChanged += (Path) => CurrentFilePath = Path; 
+        TextDocument.FilePathChanged += (Path) => ObservableFilePath = Path[.. Path.LastIndexOf('.')]; // Path without extension for clean file name display 
     }
 
 

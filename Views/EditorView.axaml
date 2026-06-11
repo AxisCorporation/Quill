@@ -3,21 +3,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:m="clr-namespace:Quill.Models"
              xmlns:vm="clr-namespace:Quill.ViewModels"
              x:Class="Quill.Views.EditorView"
              x:DataType="vm:EditorViewModel"
              d:DataContext="{d:DesignInstance vm:EditorViewModel}">
 
+
     <UserControl.Styles>
-        <Style Selector="TextBox">
+        <Style Selector="TextBox.Editor">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="Transparent"></Setter>
             <Setter Property="Background" Value="Transparent"></Setter>
         </Style>
-        <Style Selector="TextBox:pointerover/template/Border#PART_BorderElement"> <!-- Why did they have to implement changing pointerover/focus templates like this -->
+        <Style Selector="TextBox.Editor:pointerover/template/Border#PART_BorderElement"> <!-- Why did they have to implement changing pointerover/focus templates like this -->
             <Setter Property="Background" Value="Transparent"></Setter>
         </Style>
-        <Style Selector="TextBox:focus/template/Border#PART_BorderElement">
+        <Style Selector="TextBox.Editor:focus/template/Border#PART_BorderElement">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"></Setter>
         </Style>
@@ -134,11 +136,30 @@
             </Grid>
         </Border>
 
-        <StackPanel Name="SavePanel" IsVisible="{Binding ShowSavePanel}">
-        </StackPanel>
+        <Border IsVisible="{Binding ShowSavePanel}" Grid.Row="1" Background="SlateGray" CornerRadius="15" Padding="16" Margin="12"
+            BoxShadow="0 4 8 0 #40000000">
+            <Grid RowDefinitions="Auto, *" RowSpacing="50">
+                <TextBox Grid.Row="0" PlaceholderText="Enter file name.."/>
+
+                <StackPanel Grid.Row="1">
+                    <RadioButton Content=".wrt"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.wrt}}" />
+                    <RadioButton Content=".docx"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.docx}}"/>
+                    <RadioButton Content=".pdf"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.pdf}}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
         
         <Border Grid.Row="1" Background="SlateGray" Margin="300,20" CornerRadius="5">
-            <TextBox Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding EditorText}"
+            <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding EditorText}"
             AcceptsReturn="True" AcceptsTab="True"
             Margin="50, 50" TextWrapping="WrapWithOverflow">
             </TextBox>

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Quill.ViewModels;
 
@@ -12,5 +13,4 @@ public partial class EditorView : UserControl
         InitializeComponent();
     }
 
-    
 }

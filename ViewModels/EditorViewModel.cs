@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,11 +13,12 @@ namespace Quill.ViewModels;
 
 public partial class EditorViewModel : ViewModelBase
 {
+
     [ObservableProperty]
     public partial bool EditingEnabled { get; private set;} = true;
 
     [ObservableProperty]
-    public partial string EditorText { get; set; }
+    public partial string? EditorContents { get; set; }
 
     [ObservableProperty]
     public partial bool ShowSavePanel { get; set; } 
@@ -23,45 +26,51 @@ public partial class EditorViewModel : ViewModelBase
     // This is the same as the file path in TextDocument.CurrentFilePath
     // This should not be changed in code manually
     [ObservableProperty]
-    public partial string? ObservableFilePath { get; private set; } 
+    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    public partial string? FileName { get; set; } 
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    public partial string? DirectoryPath { get; set; }
 
     [ObservableProperty]
     public partial FileType FileExtension { get; set; } = FileType.wrt;
+
+    private bool IsValidFilePath() => !string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(DirectoryPath);
 
     [RelayCommand]
     private void GoToHome()
     {
         MainWindowViewModel.Navigate(new HomeViewModel());
-
-        TextDocument.FilePathChanged += (Path) => ObservableFilePath = Path[.. Path.LastIndexOf('.')]; // Path without extension for clean file name display 
     }
 
-
     [RelayCommand]
-    private async Task OpenFileSaveDialog(UserControl Control)
+    private async Task ChooseFolder(UserControl Control)
     {
-        var MainWindow = ((IClassicDesktopStyleApplicationLifetime) Application.Current!.ApplicationLifetime!).MainWindow!;
-        var Dialog = new Window();
-        await Dialog.ShowDialog(MainWindow);
+        var Top = TopLevel.GetTopLevel(Control)!;
+        var PickResult = await Top.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        {
+            Title = "Select folder to save file in.",
+            AllowMultiple = false
+        });
+
+        DirectoryPath = PickResult?[0].Path.AbsolutePath;
+
+        TextDocument.CurrentDirectory = DirectoryPath;
     }
     
-    [RelayCommand]
-    private async Task SaveFile(UserControl Control)
+    [RelayCommand(CanExecute = nameof(IsValidFilePath))]
+    private async Task SaveFile()
     {
-        // If null, make them choose a file path
-        if (TextDocument.CurrentFilePath is null)
+        TextDocument.CurrentFileName = FileName;
+        TextDocument.CurrentFileExtension = FileExtension.ToString();
+        if (await TextDocument.WriteToFileAsync(EditorContents))
         {
-            var Top = TopLevel.GetTopLevel(Control)!;
-            var PickResult = await Top.StorageProvider.SaveFilePickerWithResultAsync(new FilePickerSaveOptions()
-            {
-                Title = "Save File"
-            });
-
-            if (PickResult.File is not null)
-            {
-                TextDocument.CurrentFilePath = PickResult.File.Path.AbsolutePath;
-            }
-
+            ShowSavePanel = false;
         }
     }
+
+    [RelayCommand]
+    public void ToggleSavePanel() => ShowSavePanel = !ShowSavePanel;
+
 }

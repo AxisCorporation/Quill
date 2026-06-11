@@ -4,5 +4,6 @@ public enum FileType
 {
     wrt,
     docx,
-    pdf
+    pdf,
+    txt
 }

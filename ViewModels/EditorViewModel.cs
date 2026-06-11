@@ -60,13 +60,12 @@ public partial class EditorViewModel : ViewModelBase
         }
 
         DirectoryPath = PickResult[0].Path.AbsolutePath;
-
-        TextDocument.CurrentDirectory = DirectoryPath;
     }
     
     [RelayCommand(CanExecute = nameof(IsValidFilePath))]
     private async Task SaveFile()
     {
+        TextDocument.CurrentDirectory = DirectoryPath;
         TextDocument.CurrentFileName = FileName;
         TextDocument.CurrentFileExtension = FileExtension.ToString();
         if (await TextDocument.WriteToFileAsync(EditorContents))

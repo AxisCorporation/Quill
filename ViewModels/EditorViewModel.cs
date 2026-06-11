@@ -54,7 +54,12 @@ public partial class EditorViewModel : ViewModelBase
             AllowMultiple = false
         });
 
-        DirectoryPath = PickResult?[0].Path.AbsolutePath;
+        if (PickResult.Count == 0)
+        {
+            return;
+        }
+
+        DirectoryPath = PickResult[0].Path.AbsolutePath;
 
         TextDocument.CurrentDirectory = DirectoryPath;
     }

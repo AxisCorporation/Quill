@@ -8,8 +8,6 @@ using Avalonia.Logging;
 namespace Quill.Models;
 internal static class TextDocument
 {
-    public static event Action<string>? FileNameChanged; 
-
     private static string? CurrentFilePath 
     { 
         get 

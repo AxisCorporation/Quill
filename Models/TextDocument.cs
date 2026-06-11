@@ -14,10 +14,6 @@ internal static class TextDocument
     { 
         get 
         {
-        Debug.Write($"Dir: {CurrentDirectory}");
-        Debug.Write($"File: {CurrentFileName}");
-        Debug.Write($"Ext: {CurrentFileExtension}");
-    
             if (string.IsNullOrEmpty(CurrentDirectory) || string.IsNullOrEmpty(CurrentFileName) || string.IsNullOrEmpty(CurrentFileExtension))
             {
                 return null;

@@ -1,24 +1,47 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Quill.Models;
-internal class TextDocument
+internal static class TextDocument
 {
-    private StringBuilder text = new();
+    public static event Action<string>? FilePathChanged; 
 
-    public string Text
+    public static string? CurrentFilePath 
+    { 
+        get; 
+        set
+        {
+            field = value;
+            FilePathChanged?.Invoke(value!);
+        } 
+    } 
+
+    /// <summary>
+    /// An async extension method for overwriting the current open file with the specified contents.
+    /// </summary>
+    /// <param name="Contents">Content to overwrite the family with.</param>
+    /// <returns>False if `CurrentFilePath` is null</returns>
+    public static async Task<bool> WriteToFile(this string Contents)
     {
-        get => text.ToString(); 
+        if (CurrentFilePath is null)
+        {
+            return false;
+        }
+
+        await File.WriteAllTextAsync(CurrentFilePath, Contents);
+        return true;
     }
-    public void AddCharacter(char c)
-    {
-        text.Append(c);
-    }
 
-    public void RemoveCharacter()
+    public static async Task<bool> AppendToFile(this string Contents)
     {
-        if (text.Length == 0)
-            return;
+        if (CurrentFilePath is null)
+        {
+            return false;
+        }
 
-        text.Remove(text.Length - 1, 1);
+        await File.AppendAllTextAsync(CurrentFilePath, Contents);
+        return true;
     }
 }

@@ -5,8 +5,24 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:Quill.ViewModels"
              x:Class="Quill.Views.EditorView"
-             x:DataType="vm:EditorViewModel">
-    <Grid RowDefinitions="Auto, Auto, *, Auto">
+             x:DataType="vm:EditorViewModel"
+             d:DataContext="{d:DesignInstance vm:EditorViewModel}">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="Transparent"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+        </Style>
+        <Style Selector="TextBox:pointerover/template/Border#PART_BorderElement"> <!-- Why did they have to implement changing pointerover/focus templates like this -->
+            <Setter Property="Background" Value="Transparent"></Setter>
+        </Style>
+        <Style Selector="TextBox:focus/template/Border#PART_BorderElement">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"></Setter>
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto, *">
         
         <!-- <DockPanel Grid.Row="0"> -->
         <!--     <Menu DockPanel.Dock="Top"> -->
@@ -33,6 +49,7 @@
                             VerticalAlignment="Top">
                     <Button Content="Home" Name="Home" Command="{Binding GoToHomeCommand}"/>
                     <Button Content="New File" Name="NewFile"></Button> 
+                    <Button Content="Save" Command="{Binding OpenFileSaveDialogCommand}" CommandParameter="{Binding $parent[UserControl]}"></Button>
                     </StackPanel>
 
                 <Border Grid.Column="1" Width="1"
@@ -116,6 +133,15 @@
                 </StackPanel>
             </Grid>
         </Border>
+
+        <StackPanel Name="SavePanel" IsVisible="{Binding ShowSavePanel}">
+        </StackPanel>
         
+        <Border Grid.Row="1" Background="SlateGray" Margin="300,20" CornerRadius="5">
+            <TextBox Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding EditorText}"
+            AcceptsReturn="True" AcceptsTab="True"
+            Margin="50, 50" TextWrapping="WrapWithOverflow">
+            </TextBox>
+        </Border>
     </Grid>
 </UserControl>

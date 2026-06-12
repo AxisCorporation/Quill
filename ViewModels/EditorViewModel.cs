@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -37,7 +38,7 @@ public partial class EditorViewModel : ViewModelBase
     public partial FileType FileExtension { get; set; } = FileType.wrt;
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
-    public partial bool FileChanged { get; set; } = false; 
+    private partial bool FileChanged { get; set; } = false; 
     
     [RelayCommand]
     public void ToggleSavePanel() => ShowSavePanel = !ShowSavePanel;
@@ -48,6 +49,33 @@ public partial class EditorViewModel : ViewModelBase
     private bool IsValidFilePath() => !string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(DirectoryPath);
     private static bool CurrentPathIsSet() => TextDocument.CurrentFilePath is not null;
     private bool CanSave() => CurrentPathIsSet() && FileChanged;
+    
+    public EditorViewModel() {}
+
+    private EditorViewModel(Uri FileUri)
+    {
+        string LocalPath = FileUri.LocalPath;
+
+        TextDocument.CurrentDirectory = Path.GetDirectoryName(LocalPath);
+        TextDocument.CurrentFileName = Path.GetFileNameWithoutExtension(LocalPath);
+        TextDocument.CurrentFileExtension = Path.GetExtension(LocalPath);
+    }
+
+    public static async Task<EditorViewModel> CreateAsync(Uri FileUri) // Constructors cannot be async. Therefore, to use an async method in a constructor, a factory must be used
+    {
+        // Not setting the directory path on purpose so the user is prompted to re-enter directory path if they wish to save as a new file. Can easily change this
+        EditorViewModel ViewModel = new(FileUri)
+        {
+            EditorContents = await TextDocument.ReadTextFromFileAsync(),
+
+            FileName = TextDocument.CurrentFileName,
+            FileExtension = Enum.TryParse(TextDocument.CurrentFileExtension?.TrimStart('.'), out FileType Result) ? Result : FileType.wrt,
+
+            FileChanged = false
+        };
+
+        return ViewModel;
+    }
 
     partial void OnEditorContentsChanged(string? value)
     {
@@ -77,11 +105,14 @@ public partial class EditorViewModel : ViewModelBase
     {
         TextDocument.CurrentDirectory = DirectoryPath;
         TextDocument.CurrentFileName = FileName;
-        TextDocument.CurrentFileExtension = FileExtension.ToString();
+        TextDocument.CurrentFileExtension = $".{FileExtension}";
 
         if (await TextDocument.WriteToFileAsync(EditorContents))
         {
             ShowSavePanel = false;
+            FileChanged = false;
+
+            DirectoryPath = null;
             SaveFileCommand.NotifyCanExecuteChanged();
         }
     }

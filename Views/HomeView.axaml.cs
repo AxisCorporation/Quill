@@ -37,6 +37,6 @@ public partial class HomeView : UserControl
             return;
         }
 
-
+        MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(Result[0].Path));
     }
 }

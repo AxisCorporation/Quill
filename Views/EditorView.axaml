@@ -66,8 +66,9 @@
                             Orientation="Horizontal" 
                             VerticalAlignment="Top">
                     <Button Content="Home" Name="Home" Command="{Binding GoToHomeCommand}"/>
-                    <Button Content="New File" Name="NewFile"></Button> 
-                    <Button Content="Save" Command="{Binding ToggleSavePanel}"></Button>
+                    <Button Content="New File" Name="NewFile"/> 
+                    <Button Content="Save" Command="{Binding SaveFileCommand}"/>
+                    <Button Content="Save As" Command="{Binding ToggleSavePanel}"/>
                     </StackPanel>
 
                 <Border Grid.Column="1" Width="1"
@@ -182,8 +183,8 @@
 
 
                 <StackPanel Grid.Row="4" Orientation="Horizontal">
-                    <Button Name="Save" Content="Save" Command="{Binding SaveFileCommand}"></Button>
-                    <Button Content="Close" Command="{Binding ToggleSavePanel}"></Button>
+                    <Button Name="Save" Content="Save" Command="{Binding SaveNewFileCommand}"/>
+                    <Button Content="Close" Command="{Binding ToggleSavePanel}"/>
                 </StackPanel>
             </Grid>
         </Border>

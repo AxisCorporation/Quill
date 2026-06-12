@@ -17,11 +17,11 @@
                 <!-- Top Section -->
                 <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
                     <Button Content="New Document"
-                            Command="{Binding GoToEditorCommand}"
+                            Click="OnNewFileClick"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"></Button>
                     <Button Content="Open File"
-                            Command="{Binding NewFileCommand}"
+                            Click="OnOpenFileClick"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
@@ -29,7 +29,6 @@
                 <!-- Bottom Section -->
                 <StackPanel Grid.Row="2" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
                     <Button Content="Settings"
-                            Command="{Binding NewFileCommand}"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>

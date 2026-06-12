@@ -8,7 +8,7 @@ using Avalonia.Logging;
 namespace Quill.Models;
 internal static class TextDocument
 {
-    private static string? CurrentFilePath 
+    public static string? CurrentFilePath 
     { 
         get 
         {

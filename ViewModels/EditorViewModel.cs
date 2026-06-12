@@ -26,22 +26,32 @@ public partial class EditorViewModel : ViewModelBase
     // This is the same as the file path in TextDocument.CurrentFilePath
     // This should not be changed in code manually
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveNewFileCommand))]
     public partial string? FileName { get; set; } 
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveNewFileCommand))]
     public partial string? DirectoryPath { get; set; }
 
     [ObservableProperty]
     public partial FileType FileExtension { get; set; } = FileType.wrt;
-
-    private bool IsValidFilePath() => !string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(DirectoryPath);
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    public partial bool FileChanged { get; set; } = false; 
+    
+    [RelayCommand]
+    public void ToggleSavePanel() => ShowSavePanel = !ShowSavePanel;
 
     [RelayCommand]
-    private void GoToHome()
+    private static void GoToHome() => MainWindowViewModel.Navigate(new HomeViewModel());
+
+    private bool IsValidFilePath() => !string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(DirectoryPath);
+    private static bool CurrentPathIsSet() => TextDocument.CurrentFilePath is not null;
+    private bool CanSave() => CurrentPathIsSet() && FileChanged;
+
+    partial void OnEditorContentsChanged(string? value)
     {
-        MainWindowViewModel.Navigate(new HomeViewModel());
+        FileChanged = true;
     }
 
     [RelayCommand]
@@ -63,18 +73,24 @@ public partial class EditorViewModel : ViewModelBase
     }
     
     [RelayCommand(CanExecute = nameof(IsValidFilePath))]
-    private async Task SaveFile()
+    private async Task SaveNewFile()
     {
         TextDocument.CurrentDirectory = DirectoryPath;
         TextDocument.CurrentFileName = FileName;
         TextDocument.CurrentFileExtension = FileExtension.ToString();
+
         if (await TextDocument.WriteToFileAsync(EditorContents))
         {
             ShowSavePanel = false;
+            SaveFileCommand.NotifyCanExecuteChanged();
         }
     }
 
-    [RelayCommand]
-    public void ToggleSavePanel() => ShowSavePanel = !ShowSavePanel;
+    [RelayCommand(CanExecute = nameof(CanSave))]
+    private async Task SaveFile()
+    {
+        await TextDocument.WriteToFileAsync(EditorContents);
+        FileChanged = false;
+    }
 
 }

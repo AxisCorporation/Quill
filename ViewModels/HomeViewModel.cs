@@ -19,15 +19,11 @@ public partial class HomeViewModel : ViewModelBase
     public ObservableCollection<string> RecentDocuments { get; } = new() { "Doc 1", "Doc 2", "Doc 3" };
 
     [RelayCommand]
-    private void NewFile()
+    private void OpenFile()
     {
-        Debug = Debug == "Click 1" ? "Click 2" : "Click 1";
+        
     }
     
-    [RelayCommand]
-    private void GoToEditor()
-    {
-        MainWindowViewModel.Navigate(new EditorViewModel());
-    }
+
     
 }

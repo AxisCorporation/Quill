@@ -1,24 +1,76 @@
-﻿using System.Text;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Avalonia.Logging;
 
 namespace Quill.Models;
-internal class TextDocument
+internal static class TextDocument
 {
-    private StringBuilder text = new();
+    public static string? CurrentFilePath 
+    { 
+        get 
+        {
+            if (string.IsNullOrEmpty(CurrentDirectory) || string.IsNullOrEmpty(CurrentFileName) || string.IsNullOrEmpty(CurrentFileExtension))
+            {
+                return null;
+            }
 
-    public string Text
+            return $"{CurrentDirectory}/{CurrentFileName}{CurrentFileExtension}";
+        }
+    } 
+
+    public static string? CurrentFileName { get; set; }
+    // '.' included
+    public static string? CurrentFileExtension { get; set; }
+    public static string? CurrentDirectory { get; set; }
+
+    /// <summary>
+    /// An async method for overwriting the current open file with the specified contents.
+    /// </summary>
+    /// <param name="Contents">Content to overwrite the family with.</param>
+    /// <returns>False if `CurrentFilePath` is null</returns>
+    public static async Task<bool> WriteToFileAsync(string? Contents)
     {
-        get => text.ToString(); 
+        if (CurrentFilePath is null)
+        {
+            return false;
+        }
+
+        await File.WriteAllTextAsync(CurrentFilePath, Contents);
+        return true;
     }
-    public void AddCharacter(char c)
+
+    /// <summary>
+    /// An async method for appending the specified contents to the current open file.
+    /// </summary>
+    /// <param name="Contents">Content to overwrite the family with.</param>
+    /// <returns>False if `CurrentFilePath` is null</returns>
+    public static async Task<bool> AppendToFileAsync(string Contents)
     {
-        text.Append(c);
+        if (CurrentFilePath is null)
+        {
+            return false;
+        }
+
+        await File.AppendAllTextAsync(CurrentFilePath, Contents);
+        return true;
     }
 
-    public void RemoveCharacter()
+    public static async Task<string?> ReadTextFromFileAsync(int StartIndex = 0, int EndIndex = int.MaxValue)
     {
-        if (text.Length == 0)
-            return;
+        if (CurrentFilePath is null)
+        {
+            return null;
+        }
 
-        text.Remove(text.Length - 1, 1);
+        string FileContents = await File.ReadAllTextAsync(CurrentFilePath);
+        if (EndIndex > FileContents.Length)
+        {
+            EndIndex = FileContents.Length - 1;
+        }
+
+        return FileContents[StartIndex .. EndIndex];
     }
 }

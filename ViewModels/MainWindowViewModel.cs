@@ -5,8 +5,7 @@ namespace Quill.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private static MainWindowViewModel? _instance;
-    public static MainWindowViewModel Instance { get => _instance ??= new(); }
+    public static MainWindowViewModel Instance { get => field ??= new(); }
 
     [ObservableProperty]
     public partial ViewModelBase CurrentView { get; private set;}

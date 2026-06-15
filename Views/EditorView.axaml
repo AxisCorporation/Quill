@@ -3,23 +3,58 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Quill.Views.EditorView">
-    <Grid RowDefinitions="Auto, Auto, *, Auto">
-        
-        <!-- <DockPanel Grid.Row="0"> -->
-        <!--     <Menu DockPanel.Dock="Top"> -->
-        <!--         <MenuItem Header="_File"> -->
-        <!--             <MenuItem Header="_Open..."/> -->
-        <!--             <Separator/> -->
-        <!--             <MenuItem Header="_Exit"/> -->
-        <!--         </MenuItem> -->
-        <!--         <MenuItem Header="_Edit"> -->
-        <!--             <MenuItem Header="Copy"/> -->
-        <!--             <MenuItem Header="Paste"/> -->
-        <!--         </MenuItem> -->
-        <!--     </Menu> -->
-        <!--     <TextBlock/> -->
-        <!-- </DockPanel> -->
+             xmlns:m="clr-namespace:Quill.Models"
+             xmlns:vm="clr-namespace:Quill.ViewModels"
+             x:Class="Quill.Views.EditorView"
+             x:DataType="vm:EditorViewModel"
+             d:DataContext="{d:DesignInstance vm:EditorViewModel}">
+
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.Editor">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TextBox.Editor:pointerover/template/Border#PART_BorderElement"> <!-- Why did they have to implement changing pointerover/focus templates like this -->
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TextBox.Editor:focus/template/Border#PART_BorderElement">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style Selector="TextBox.FilePath">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#607080"/>
+        </Style>
+        <Style Selector="TextBox.FilePath:pointerover/template/Border#PART_BorderElement"> 
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#607080"/>
+        </Style>
+        <Style Selector="TextBox.FilePath:focus/template/Border#PART_BorderElement">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#607080"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, Auto, *">
+    
+        <StackPanel Grid.Row="0" Margin="4" 
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Top">
+            <DropDownButton Content="File">
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuItem Header="Save" Command="{Binding SaveFileCommand}"/>
+                        <MenuItem Header="Save As" Command="{Binding ToggleSavePanel}"/>
+                        <Separator/>
+                        <MenuItem Header="Home" Command="{Binding GoToHomeCommand}"/>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>                        
+            </DropDownButton> 
+
+        </StackPanel>
         
         <Border Grid.Row="1" Margin="2" Background="SlateGray" CornerRadius="15">
             <Grid ColumnDefinitions="*, 1, *, 1, *"
@@ -54,6 +89,7 @@
 
                     <TextBlock Text="Font"
                                HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
                                FontSize="11"
                                Opacity="0.7"/>
                 </StackPanel>
@@ -63,11 +99,14 @@
                         Margin="4"/>
                 
                 <!-- Paragraph -->
-                <StackPanel Grid.Column="2"
-                            Spacing="4">
+                <Grid Grid.Column="2"
+                            RowDefinitions="*, auto"
+                            Margin="4">
 
                     <StackPanel Orientation="Horizontal"
-                                Spacing="4">
+                                Spacing="4"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Center">
 
                         <Button Content="⯇"/>
                         <Button Content="≡"/>
@@ -79,9 +118,10 @@
 
                     <TextBlock Text="Paragraph"
                                HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
                                FontSize="11"
                                Opacity="0.7"/>
-                </StackPanel>
+                </Grid>
                 
                 
                 <Border Grid.Column="3" Width="1"
@@ -89,7 +129,7 @@
                         Margin="4"/>
                 
                 <!-- Styles -->
-                <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                <StackPanel Grid.Column="4" Margin="4" Spacing="4" VerticalAlignment="Top">
                     <ComboBox Width="200" HorizontalAlignment="Center">
                         <ComboBoxItem Content="Title"/>
                         <ComboBoxItem Content="Heading 1"/>
@@ -99,6 +139,48 @@
                 </StackPanel>
             </Grid>
         </Border>
+
+        <Border Name= "SavePanel" IsVisible="{Binding ShowSavePanel}" Grid.Row="2" Background="SlateGray" CornerRadius="15" Margin="50" 
+            BoxShadow="0 4 8 0 #40000000"
+            ZIndex="1"
+            MaxWidth="800">
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="50" Margin= "30,50">
+                <TextBox Classes="FilePath" Grid.Row="0" PlaceholderText="Enter file name.." Text="{Binding FileName}"/>
+                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding DirectoryPath}" IsReadOnly="true" IsHitTestVisible="false"/>
+                <Button Grid.Row="2" Content="Choose Folder" Command="{Binding ChooseFolderCommand}" CommandParameter="{Binding $parent[UserControl]}"/>
+
+                <StackPanel Grid.Row="3">
+                    <RadioButton Content=".wrt"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.wrt}}" />
+                    <RadioButton Content=".docx"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.docx}}"/>
+                    <RadioButton Content=".pdf"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.pdf}}"/>
+                    <RadioButton Content=".txt"
+                            IsChecked="{Binding FileExtension,
+                            Converter={StaticResource EnumToBoolConverter},
+                            ConverterParameter={x:Static m:FileType.txt}}"/>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                    <Button Name="Save" Content="Save" Command="{Binding SaveNewFileCommand}"/>
+                    <Button Content="Close" Command="{Binding ToggleSavePanel}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
         
+        <Border Grid.Row="2" Background="#708090" Margin="300,20" CornerRadius="5">
+            <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding EditorContents}"
+            AcceptsReturn="True" AcceptsTab="True"
+            Margin="50, 50" TextWrapping="WrapWithOverflow">
+            </TextBox>
+        </Border>
     </Grid>
 </UserControl>

@@ -1,7 +1,7 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using Quill.Models;
+using System.Collections.ObjectModel;
 namespace Quill.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
@@ -14,16 +14,12 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel()
     {
     }
-    
-    // Will change from string to a proper datatype later
-    public ObservableCollection<string> RecentDocuments { get; } = new() { "Doc 1", "Doc 2", "Doc 3" };
 
+    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsStore.Documents;
+    //not stor docs directly but shares stored so ui automatically in sync
     [RelayCommand]
     private void OpenFile()
     {
         
     }
-    
-
-    
 }

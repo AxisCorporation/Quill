@@ -21,6 +21,7 @@ internal static class TextDocument
         }
     } 
 
+
     public static string? CurrentFileName { get; set; }
     // '.' included
     public static string? CurrentFileExtension { get; set; }

@@ -42,17 +42,26 @@
             <ItemsControl ItemsSource="{Binding RecentDocuments}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="8"
-                                Margin="4"
-                                Background="#222">
-                            <TextBlock Text="{Binding}" />
-                        </Border>
+						<Button Click="OnRecentDocumentClick"
+                            CommandParameter="{Binding}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                             Padding="0">
+							<Border Padding="8"
+									Margin="4"
+									Background="#222">
+								<StackPanel>
+									<TextBlock Text="{Binding FileName}" FontWeight="Bold"/>
+									<TextBlock Text="{Binding FilePath}" FontSize="10" Opacity="0.7"/>
+								</StackPanel>
+							</Border>
+						</Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

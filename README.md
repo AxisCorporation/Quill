@@ -19,7 +19,7 @@ The aim of Quill is to be a lightweight and simple word processor so people like
 ### Objectives
 
 - [ ] Text Engine
-  - [ ] Basic Text
+  - [X] Basic Text
   - [ ] Rich Text
   - [ ] Alignment
   - [ ] Text Styles
@@ -51,9 +51,31 @@ This is the middle layer between the View and the Model. It takes raw data from 
 
 ## Contributors
 - Zain Farhan: Project Lead
+- Daud: Head Developer
+- Isaac: Developer
+- Kalsoom: Developer
 
 ## Timeline
 The Development Cycles have been divided into various Stages.
+
+Task Set 1:
+- [x] FrontPage UI - Zain Farhan
+- [x] MainPage UI - Zain Farhan
+- [x] Taking Basic Text Input - Isaac
+
+Task Set 2:
+- [ ] ~~Style - Kalsoom~~
+- [x] Text Display - Daud
+- [x] Basic File Functionality - Daud
+
+Task Set 3:
+- [X] Basic File Format - Zain Farhan
+- [X] Recent Documents - Isaac
+- [ ] Document Text Formatting - Daud
+- [ ] Styles - Kalsoom
+
+Task Set 4:
+- [ ] UI Polish - Isaac
 
 ## Guidelines
 

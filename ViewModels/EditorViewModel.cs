@@ -14,114 +14,114 @@ namespace Quill.ViewModels;
 
 public partial class EditorViewModel : ViewModelBase
 {
+    // Feel free to change it to properties to make it work with VS Code, I don't think it matters
+    [ObservableProperty]
+    private TextDocument _textDoc = new();
+    
+    [ObservableProperty]
+    private SaveAsState _saveState = new();
+    
+    /// <remarks>
+    /// Tried to do
+    /// [ObservableProperty]
+    /// public partial string? DirectoryPath
+    /// {
+    ///     get => SaveState.DirectoryPath;
+    ///     set
+    ///     {
+    ///         SaveState.DirectoryPath = value;
+    ///         OnPropertyChanged();
+    ///     }
+    /// }
+    /// But didn't work, so for now will make do with this, as direct
+    /// binding to SaveState.Directory doesn't work. Or change the SaveState abstraction
+    /// </remarks>
+    [ObservableProperty]
+    public partial string? DirectoryPath { get; set; }
+    
+    // Will make it a property later and bind directly to TextDoc.Directory
+    private string? _filePath;
 
     [ObservableProperty]
     public partial bool EditingEnabled { get; private set;} = true;
-
-    [ObservableProperty]
-    public partial string? EditorContents { get; set; }
-
+    
     [ObservableProperty]
     public partial bool ShowSavePanel { get; set; } 
-
-    // This is the same as the file path in TextDocument.CurrentFilePath
-    // This should not be changed in code manually
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveNewFileCommand))]
-    public partial string? FileName { get; set; } 
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveNewFileCommand))]
-    public partial string? DirectoryPath { get; set; }
-
-    [ObservableProperty]
-    public partial FileType FileExtension { get; set; } = FileType.wrt;
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
-    private partial bool FileChanged { get; set; } = false; 
     
     [RelayCommand]
-    public void ToggleSavePanel() => ShowSavePanel = !ShowSavePanel;
+    public void ToggleSavePanel()
+    {
+        ShowSavePanel = !ShowSavePanel;
+        // Not sure if this is even needed, but why not?
+        EditingEnabled = !EditingEnabled;
+    }
 
     [RelayCommand]
     private static void GoToHome() => MainWindowViewModel.Navigate(new HomeViewModel());
-
-    private bool IsValidFilePath() => !string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(DirectoryPath);
-    private static bool CurrentPathIsSet() => TextDocument.CurrentFilePath is not null;
-    private bool CanSave() => CurrentPathIsSet() && FileChanged;
+    
+    // private static bool CurrentPathIsSet() => TextDoc.CurrentFilePath is not null;
+    // private bool CanSave() => CurrentPathIsSet() && FileChanged;
     
     public EditorViewModel() {}
 
-    private EditorViewModel(Uri FileUri)
+    private EditorViewModel(TextDocument doc, string filePath)
     {
-        string LocalPath = FileUri.LocalPath;
-
-        TextDocument.CurrentDirectory = Path.GetDirectoryName(LocalPath);
-        TextDocument.CurrentFileName = Path.GetFileNameWithoutExtension(LocalPath);
-        TextDocument.CurrentFileExtension = Path.GetExtension(LocalPath);
-    }
-
-    public static async Task<EditorViewModel> CreateAsync(Uri FileUri) // Constructors cannot be async. Therefore, to use an async method in a constructor, a factory must be used
-    {
-        // Not setting the directory path on purpose so the user is prompted to re-enter directory path if they wish to save as a new file. Can easily change this
-        EditorViewModel ViewModel = new(FileUri)
-        {
-            EditorContents = await TextDocument.ReadTextFromFileAsync(),
-
-            FileName = TextDocument.CurrentFileName,
-            FileExtension = Enum.TryParse(TextDocument.CurrentFileExtension?.TrimStart('.'), out FileType Result) ? Result : FileType.wrt,
-
-            FileChanged = false
-        };
-
-        return ViewModel;
-    }
-
-    partial void OnEditorContentsChanged(string? value)
-    {
-        FileChanged = true;
-    }
-
-    [RelayCommand]
-    private async Task ChooseFolder(UserControl Control)
-    {
-        var Top = TopLevel.GetTopLevel(Control)!;
-        var PickResult = await Top.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
-        {
-            Title = "Select folder to save file in.",
-            AllowMultiple = false
-        });
-
-        if (PickResult.Count == 0)
-        {
-            return;
-        }
-
-        DirectoryPath = PickResult[0].Path.AbsolutePath;
+        _textDoc = doc;
+        _filePath = filePath;
     }
     
-    [RelayCommand(CanExecute = nameof(IsValidFilePath))]
-    private async Task SaveNewFile()
+    // Factory Constructor
+    public static async Task<EditorViewModel> CreateAsync(string filePath)
     {
-        TextDocument.CurrentDirectory = DirectoryPath;
-        TextDocument.CurrentFileName = FileName;
-        TextDocument.CurrentFileExtension = $".{FileExtension}";
+        var doc = await FileService.Instance.OpenAsync(filePath);
+        
 
-        if (await TextDocument.WriteToFileAsync(EditorContents))
-        {
-            ShowSavePanel = false;
-            FileChanged = false;
-
-            DirectoryPath = null;
-            SaveFileCommand.NotifyCanExecuteChanged();
-        }
+        return new EditorViewModel(doc, filePath);
     }
 
-    [RelayCommand(CanExecute = nameof(CanSave))]
-    private async Task SaveFile()
+
+    [RelayCommand]
+    private async Task SaveAsync()
     {
-        await TextDocument.WriteToFileAsync(EditorContents);
-        FileChanged = false;
+        if (_filePath is null)
+            return; // later becomes SaveAs Maybe
+
+        await FileService.Instance.SaveAsync(_filePath, TextDoc);
+    }
+    
+    [RelayCommand]
+    private async Task ChooseFolderAsync()
+    {
+        var path = await FileService.Instance.PickFolderAsync();
+
+        if (path is null)
+            return;
+
+        SaveState.DirectoryPath = path;
+        DirectoryPath = path;
+    }
+    
+    [RelayCommand]
+    private async Task SaveNewFileAsync()
+    {
+        var fullPath =
+            Path.Combine(
+                SaveState.DirectoryPath,
+                $"{SaveState.FileName}.{SaveState.FileExtension}"
+            );
+        
+        // Will probably find a way to change this later as well
+        TextDocument tempDoc = new()
+        {
+            FileName = SaveState.FileName,
+            Content =  TextDoc.Content,
+            Extension = $".{SaveState.FileExtension.ToString()}",
+            Directory = SaveState.DirectoryPath
+        };
+
+        await FileService.Instance.SaveAsync(fullPath, tempDoc);
+        
+        ToggleSavePanel();
     }
 
 }

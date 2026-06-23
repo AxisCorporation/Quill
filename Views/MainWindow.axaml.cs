@@ -8,10 +8,5 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
-        Opened += (_, _) =>
-        {
-            FileService.Instance.MainWindow = this;
-        };
     }
 }

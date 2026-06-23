@@ -146,7 +146,7 @@
             MaxWidth="800">
             <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="50" Margin= "30,50">
                 <TextBox Classes="FilePath" Grid.Row="0" PlaceholderText="Enter file name.." Text="{Binding SaveState.FileName}"/>
-                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding DirectoryPath}" IsReadOnly="true" IsHitTestVisible="false"/>
+                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding Directory}" IsReadOnly="true" IsHitTestVisible="false"/>
                 <Button Grid.Row="2" Content="Choose Folder" Command="{Binding ChooseFolderCommand}" CommandParameter="{Binding $parent[UserControl]}"/>
         
                 <StackPanel Grid.Row="3">
@@ -178,7 +178,7 @@
         
         <Border Grid.Row="2" Background="#708090" Margin="300,20" CornerRadius="5">
             <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding TextDoc.Content}"
-            AcceptsReturn="True" AcceptsTab="True"
+            AcceptsReturn="True" AcceptsTab="True" TextChanged="OnTextChanged"
             Margin="50, 50" TextWrapping="WrapWithOverflow">
             </TextBox>
         </Border>

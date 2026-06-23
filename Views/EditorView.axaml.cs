@@ -13,4 +13,11 @@ public partial class EditorView : UserControl
         InitializeComponent();
     }
 
+    private void OnTextChanged(object? sender, TextChangedEventArgs a)
+    {
+        if (DataContext is EditorViewModel vm)
+        {
+            vm.FileChanged = true;
+        }
+    }
 }

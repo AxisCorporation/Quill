@@ -1,25 +1,24 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 
 namespace Quill.Models;
 
-public class FileService
+public static class FileService
 {
-    private static readonly FileService _instance = new();
-
-    public static FileService Instance => _instance;
-
-    private FileService()
+    private static JsonSerializerOptions serializerWriteOptions = new() // Initializaing serializer options is costly, better to reuse according to docs
     {
-        
-    }
+        WriteIndented = true
+    };
     
-    public TopLevel? MainWindow { get; set; }
+    public static TopLevel MainWindow => (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!
+                                         .MainWindow!;
     
-    public async Task<TextDocument> OpenAsync(string path)
+    public static async Task<TextDocument> OpenAsync(string path)
     {
         string json = await File.ReadAllTextAsync(path);
 
@@ -28,17 +27,14 @@ public class FileService
         return doc ?? new TextDocument();
     }
 
-    public async Task SaveAsync(string path, TextDocument document)
+    public static async Task SaveAsync(string path, TextDocument document)
     {
-        var json = JsonSerializer.Serialize(document, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        var json = JsonSerializer.Serialize(document, serializerWriteOptions);
 
         await File.WriteAllTextAsync(path, json);
     }
     
-    public async Task<IStorageFile?> OpenFileAsync()
+    public static async Task<IStorageFile?> OpenFileAsync()
     {
         if (MainWindow is null)
             return null;
@@ -56,7 +52,7 @@ public class FileService
             : null;
     }
     
-    public async Task<string?> PickFolderAsync()
+    public static async Task<string?> PickFolderAsync()
     {
         if (MainWindow is null)
             return null;

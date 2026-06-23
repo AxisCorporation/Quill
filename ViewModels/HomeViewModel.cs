@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
@@ -11,7 +12,6 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private string _debug  = "Debug Statement!";
 
-    
     public HomeViewModel()
     {
     }
@@ -20,15 +20,15 @@ public partial class HomeViewModel : ViewModelBase
     public ObservableCollection<string> RecentDocuments { get; } = new() { "Doc 1", "Doc 2", "Doc 3" };
 
     [RelayCommand]
-    private void NewFile()
+    private static void NewFile()
     {
         MainWindowViewModel.Navigate(new EditorViewModel());
     }
 
     [RelayCommand]
-    private async void OpenFile()
+    private static async Task OpenFile()
     {
-        var file = await FileService.Instance.OpenFileAsync();
+        var file = await FileService.OpenFileAsync();
 
         if (file is null) return;
         
@@ -37,8 +37,5 @@ public partial class HomeViewModel : ViewModelBase
 
         var path = file.Path.LocalPath;
         MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
-    }
-    
-
-    
+    }    
 }

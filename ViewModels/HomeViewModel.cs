@@ -12,7 +12,7 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private string _debug  = "Debug Statement!";
     //not store docs directly but shares stored so ui automatically in sync
-    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
+    public ObservableCollection<TextDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
 
     public HomeViewModel()
     {

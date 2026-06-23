@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Quill.Models;
 
 namespace Quill.Views;
 

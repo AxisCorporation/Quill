@@ -17,11 +17,11 @@
                 <!-- Top Section -->
                 <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
                     <Button Content="New Document"
-                            Click="OnNewFileClick"
+                            Command="{Binding NewFileCommand}"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"></Button>
                     <Button Content="Open File"
-                            Click="OnOpenFileClick"
+                            Command="{Binding OpenFileCommand}"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>

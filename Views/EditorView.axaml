@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:m="clr-namespace:Quill.Models"
              xmlns:vm="clr-namespace:Quill.ViewModels"
+             xmlns:m="clr-namespace:Quill.Models"
              x:Class="Quill.Views.EditorView"
              x:DataType="vm:EditorViewModel"
              d:DataContext="{d:DesignInstance vm:EditorViewModel}">
@@ -16,7 +16,7 @@
             <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="TextBox.Editor:pointerover/template/Border#PART_BorderElement"> <!-- Why did they have to implement changing pointerover/focus templates like this -->
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent"/>  <!-- I don't even know wtf we are doing here? -->
         </Style>
         <Style Selector="TextBox.Editor:focus/template/Border#PART_BorderElement">
             <Setter Property="BorderThickness" Value="0"/>
@@ -46,8 +46,8 @@
             <DropDownButton Content="File">
                 <DropDownButton.Flyout>
                     <MenuFlyout Placement="Bottom">
-                        <MenuItem Header="Save" Command="{Binding SaveFileCommand}"/>
-                        <MenuItem Header="Save As" Command="{Binding ToggleSavePanel}"/>
+                        <MenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                        <MenuItem Header="Save As" Command="{Binding ToggleSavePanelCommand}"/>
                         <Separator/>
                         <MenuItem Header="Home" Command="{Binding GoToHomeCommand}"/>
                     </MenuFlyout>
@@ -140,35 +140,35 @@
             </Grid>
         </Border>
 
-        <Border Name= "SavePanel" IsVisible="{Binding ShowSavePanel}" Grid.Row="2" Background="SlateGray" CornerRadius="15" Margin="50" 
+        <Border Name= "SavePanel" IsVisible="{Binding ShowSavePanel}" Grid.Row="2" Background="{StaticResource Color.Background}" CornerRadius="15" Margin="50"
             BoxShadow="0 4 8 0 #40000000"
             ZIndex="1"
             MaxWidth="800">
             <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="50" Margin= "30,50">
-                <TextBox Classes="FilePath" Grid.Row="0" PlaceholderText="Enter file name.." Text="{Binding FileName}"/>
-                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding DirectoryPath}" IsReadOnly="true" IsHitTestVisible="false"/>
+                <TextBox Classes="FilePath" Grid.Row="0" PlaceholderText="Enter file name.." Text="{Binding SaveState.FileName}"/>
+                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding SaveDirectory}" IsReadOnly="true" IsHitTestVisible="false"/>
                 <Button Grid.Row="2" Content="Choose Folder" Command="{Binding ChooseFolderCommand}" CommandParameter="{Binding $parent[UserControl]}"/>
-
+        
                 <StackPanel Grid.Row="3">
                     <RadioButton Content=".wrt"
-                            IsChecked="{Binding FileExtension,
+                            IsChecked="{Binding SaveState.FileExtension,
                             Converter={StaticResource EnumToBoolConverter},
                             ConverterParameter={x:Static m:FileType.wrt}}" />
                     <RadioButton Content=".docx"
-                            IsChecked="{Binding FileExtension,
+                            IsChecked="{Binding SaveState.FileExtension,
                             Converter={StaticResource EnumToBoolConverter},
                             ConverterParameter={x:Static m:FileType.docx}}"/>
                     <RadioButton Content=".pdf"
-                            IsChecked="{Binding FileExtension,
+                            IsChecked="{Binding SaveState.FileExtension,
                             Converter={StaticResource EnumToBoolConverter},
                             ConverterParameter={x:Static m:FileType.pdf}}"/>
                     <RadioButton Content=".txt"
-                            IsChecked="{Binding FileExtension,
+                            IsChecked="{Binding SaveState.FileExtension,
                             Converter={StaticResource EnumToBoolConverter},
                             ConverterParameter={x:Static m:FileType.txt}}"/>
                 </StackPanel>
-
-
+        
+        
                 <StackPanel Grid.Row="4" Orientation="Horizontal">
                     <Button Name="Save" Content="Save" Command="{Binding SaveNewFileCommand}"/>
                     <Button Content="Close" Command="{Binding ToggleSavePanel}"/>
@@ -177,8 +177,8 @@
         </Border>
         
         <Border Grid.Row="2" Background="#708090" Margin="300,20" CornerRadius="5">
-            <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding EditorContents}"
-            AcceptsReturn="True" AcceptsTab="True"
+            <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding TextDoc.Content}"
+            AcceptsReturn="True" AcceptsTab="True" TextChanged="OnTextChanged"
             Margin="50, 50" TextWrapping="WrapWithOverflow">
             </TextBox>
         </Border>

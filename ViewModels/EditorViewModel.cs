@@ -73,7 +73,7 @@ public partial class EditorViewModel : ViewModelBase
 
             FileChanged = false
         };
-        RecentDocumentsStore.Add(FileUri.LocalPath);//add to recent doc to show on homescreen
+        RecentDocumentsViewModel.Add(FileUri.LocalPath);//add to recent doc to show on homescreen
         return ViewModel;
     }
 
@@ -109,7 +109,7 @@ public partial class EditorViewModel : ViewModelBase
 
         if (await TextDocument.WriteToFileAsync(EditorContents))
         {
-            RecentDocumentsStore.Add(TextDocument.CurrentFilePath!);
+            RecentDocumentsViewModel.Add(TextDocument.CurrentFilePath!);
             ShowSavePanel = false;
             FileChanged = false;
 

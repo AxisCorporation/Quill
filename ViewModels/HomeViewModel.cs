@@ -15,7 +15,7 @@ public partial class HomeViewModel : ViewModelBase
     {
     }
 
-    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsStore.Documents;
+    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
     //not stor docs directly but shares stored so ui automatically in sync
     [RelayCommand]
     private void OpenFile()

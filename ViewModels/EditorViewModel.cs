@@ -15,22 +15,12 @@ public partial class EditorViewModel : ViewModelBase
     [ObservableProperty]
     public partial SaveAsState SaveState { get; set; } = new();
     
-    public string? Directory
-    { 
-        get => TextDoc.Directory;
-        set
-        {
-            TextDoc.Directory = value;
-            OnPropertyChanged(nameof(Directory));
-        }
-    } 
-
     public string? SaveDirectory
     { 
         get => SaveState.Directory; 
         set
         {
-            TextDoc.Directory = value;
+            SaveState.Directory = value;
             OnPropertyChanged(nameof(SaveDirectory));
         }
     } 
@@ -95,9 +85,7 @@ public partial class EditorViewModel : ViewModelBase
         if (path is null)
             return;
 
-        SaveState.Directory = path;
-        Directory = path;
-
+        SaveDirectory = path;
         SaveNewFileCommand.NotifyCanExecuteChanged();
     }
     

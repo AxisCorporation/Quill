@@ -63,7 +63,7 @@ public partial class EditorViewModel : ViewModelBase
     {
         var doc = await FileService.OpenAsync(filePath);
         
-        RecentDocumentsViewModel.Add(FileUri.LocalPath); // add to recent doc to show on homescreen
+        RecentDocumentsViewModel.Add(filePath); // add to recent doc to show on homescreen
         
         return new EditorViewModel(doc, filePath);
     }
@@ -102,7 +102,7 @@ public partial class EditorViewModel : ViewModelBase
             Directory = SaveState.Directory
         };
         
-        RecentDocumentsViewModel.Add(TextDocument.CurrentFilePath!);
+        RecentDocumentsViewModel.Add(SaveState.Directory!);
 
         await FileService.SaveAsync(SaveState.FilePath!, TextDoc);
         

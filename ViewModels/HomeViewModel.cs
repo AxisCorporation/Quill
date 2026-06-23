@@ -11,13 +11,13 @@ public partial class HomeViewModel : ViewModelBase
     // This is redundant and only acts as a placeholder rn
     [ObservableProperty]
     private string _debug  = "Debug Statement!";
+    //not store docs directly but shares stored so ui automatically in sync
+    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
 
     public HomeViewModel()
     {
     }
-
-    public ObservableCollection<RecentDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
-    //not stor docs directly but shares stored so ui automatically in sync
+    
     [RelayCommand]
     private static void NewFile()
     {

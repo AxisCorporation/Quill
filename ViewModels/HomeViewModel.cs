@@ -36,5 +36,22 @@ public partial class HomeViewModel : ViewModelBase
 
         var path = file.Path.LocalPath;
         MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
-    }    
+    }
+    
+    [RelayCommand]
+    private async Task OpenRecentDocument(TextDocument document)
+    {
+        if (document is null)
+            return;
+
+        var path = document.FilePath;
+
+        if (path == null)
+        {
+            // Handle missing file
+            return;
+        }
+
+        MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
+    }
 }

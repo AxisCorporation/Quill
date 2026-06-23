@@ -39,7 +39,7 @@
         <StackPanel Grid.Column="1" Margin="10" Spacing="10" HorizontalAlignment="Stretch">
             <TextBlock Text="Recent Documents" FontSize="{StaticResource HeadingSize}" FontWeight="Bold"></TextBlock>
             
-            <ItemsControl ItemsSource="{Binding RecentDocuments}">
+            <ItemsControl x:Name="RecentDocs" ItemsSource="{Binding RecentDocuments}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
@@ -48,11 +48,11 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-						<Button
-                            CommandParameter="{Binding}"
-                            Background="Transparent"
-                            BorderThickness="0"
-                             Padding="0">
+						<Button Command="{Binding #RecentDocs.DataContext.OpenRecentDocumentCommand}"
+                                CommandParameter="{Binding}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
 							<Border Padding="8"
 									Margin="4"
 									Background="#222">

@@ -48,7 +48,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-						<Button Click="OnRecentDocumentClick"
+						<Button
                             CommandParameter="{Binding}"
                             Background="Transparent"
                             BorderThickness="0"

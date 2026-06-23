@@ -9,10 +9,7 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-
-    <Application.Resources>
-        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
-    </Application.Resources>
+             
     <Application.Styles>
         <FluentTheme />
         
@@ -78,7 +75,7 @@
         <Thickness x:Key="DefaultMargin">8</Thickness>
         <Thickness x:Key="PagePadding">16</Thickness>
         
-        
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
     </Application.Resources>
              
 </Application>

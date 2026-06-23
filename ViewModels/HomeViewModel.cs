@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Quill.Models;
 
 namespace Quill.ViewModels;
 
@@ -10,7 +12,6 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private string _debug  = "Debug Statement!";
 
-    
     public HomeViewModel()
     {
     }
@@ -19,11 +20,22 @@ public partial class HomeViewModel : ViewModelBase
     public ObservableCollection<string> RecentDocuments { get; } = new() { "Doc 1", "Doc 2", "Doc 3" };
 
     [RelayCommand]
-    private void OpenFile()
+    private static void NewFile()
     {
-        
+        MainWindowViewModel.Navigate(new EditorViewModel());
     }
-    
 
-    
+    [RelayCommand]
+    private static async Task OpenFile()
+    {
+        var file = await FileService.OpenFileAsync();
+
+        if (file is null) return;
+        
+        // We can add Validation for file extension either here or add file
+        // patterns separately in the OpenFile function itself, for now I am not doing that
+
+        var path = file.Path.LocalPath;
+        MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
+    }    
 }

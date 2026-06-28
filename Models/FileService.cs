@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using AvRichTextBox;
 
 namespace Quill.Models;
 
@@ -22,16 +23,21 @@ public static class FileService
     {
         string json = await File.ReadAllTextAsync(path);
 
-        var doc = JsonSerializer.Deserialize<TextDocument>(json);
+        TextDocument textDoc = new()
+        {
+            FileName = Path.GetFileNameWithoutExtension(path),
+            Extension = Path.GetExtension(path),
+            Directory = Path.GetDirectoryName(path)
+        };
 
-        return doc ?? new TextDocument();
+        return textDoc;
     }
 
-    public static async Task SaveAsync(string path, TextDocument document)
+    public static async Task SaveAsync(string path, string xaml)
     {
-        var json = JsonSerializer.Serialize(document, serializerWriteOptions);
+        // var json = JsonSerializer.Serialize(document, serializerWriteOptions);
 
-        await File.WriteAllTextAsync(path, json);
+        await File.WriteAllTextAsync(path, xaml);
     }
     
     public static async Task<IStorageFile?> OpenFileAsync()

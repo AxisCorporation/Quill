@@ -1,5 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
+using AvRichTextBox;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
@@ -8,7 +9,7 @@ namespace Quill.ViewModels;
 
 public partial class EditorViewModel : ViewModelBase
 {
-    // Feel free to change it to properties to make it work with VS Code, I don't think it matters
+    public RichTextBox? RichTextBox { private get; set => field ??= value; }
     [ObservableProperty]
     public partial TextDocument TextDoc { get; set; } = new();
     
@@ -52,7 +53,7 @@ public partial class EditorViewModel : ViewModelBase
 
     public EditorViewModel() {}
 
-    private EditorViewModel(TextDocument doc, string filePath)
+    private EditorViewModel(TextDocument doc)
     {
         TextDoc = doc;
     }
@@ -63,7 +64,7 @@ public partial class EditorViewModel : ViewModelBase
     {
         var doc = await FileService.OpenAsync(filePath);
         
-        return new EditorViewModel(doc, filePath);
+        return new EditorViewModel(doc);
     }
 
 
@@ -73,7 +74,9 @@ public partial class EditorViewModel : ViewModelBase
         if (TextDoc.FilePath is null)
             return; 
 
-        await FileService.SaveAsync(TextDoc.FilePath, TextDoc);
+        string xaml = RichTextBox!.SaveXamlString();
+        await FileService.SaveAsync(TextDoc.FilePath, xaml);
+
         FileChanged = false;
     }
     
@@ -95,12 +98,11 @@ public partial class EditorViewModel : ViewModelBase
         TextDoc = new()
         {
             FileName = SaveState.FileName,
-            Content =  TextDoc.Content,
             Extension = $".{SaveState.FileExtension}",
             Directory = SaveState.Directory
         };
 
-        await FileService.SaveAsync(SaveState.FilePath!, TextDoc);
+        await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!.SaveXamlString());
         
         SaveState.Directory = null;
 

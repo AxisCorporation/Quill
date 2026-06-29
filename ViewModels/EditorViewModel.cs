@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading.Tasks;
 using AvRichTextBox;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -10,22 +9,12 @@ namespace Quill.ViewModels;
 public partial class EditorViewModel : ViewModelBase
 {
     public RichTextBox? RichTextBox { private get; set => field ??= value; }
+
     [ObservableProperty]
     public partial TextDocument TextDoc { get; set; } = new();
-    
+
     [ObservableProperty]
     public partial SaveAsState SaveState { get; set; } = new();
-    
-    public string? SaveDirectory
-    { 
-        get => SaveState.Directory; 
-        set
-        {
-            SaveState.Directory = value;
-            OnPropertyChanged(nameof(SaveDirectory));
-        }
-    } 
-
 
     [ObservableProperty]
     public partial bool EditingEnabled { get; private set;} = true;
@@ -74,8 +63,7 @@ public partial class EditorViewModel : ViewModelBase
         if (TextDoc.FilePath is null)
             return; 
 
-        string xaml = RichTextBox!.SaveXamlString();
-        await FileService.SaveAsync(TextDoc.FilePath, xaml);
+        await FileService.SaveAsync(TextDoc.FilePath, RichTextBox!);
 
         FileChanged = false;
     }
@@ -88,7 +76,7 @@ public partial class EditorViewModel : ViewModelBase
         if (path is null)
             return;
 
-        SaveDirectory = path;
+        SaveState.Directory = path;
         SaveNewFileCommand.NotifyCanExecuteChanged();
     }
     
@@ -102,7 +90,7 @@ public partial class EditorViewModel : ViewModelBase
             Directory = SaveState.Directory
         };
 
-        await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!.SaveXamlString());
+        await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!);
         
         SaveState.Directory = null;
 

@@ -21,8 +21,6 @@ public static class FileService
     
     public static async Task<TextDocument> OpenAsync(string path)
     {
-        string json = await File.ReadAllTextAsync(path);
-
         TextDocument textDoc = new()
         {
             FileName = Path.GetFileNameWithoutExtension(path),
@@ -33,11 +31,27 @@ public static class FileService
         return textDoc;
     }
 
-    public static async Task SaveAsync(string path, string xaml)
+    public static async Task SaveAsync(string path, RichTextBox rtb)
     {
-        // var json = JsonSerializer.Serialize(document, serializerWriteOptions);
+        string content;
+        string extension = Path.GetExtension(path);
 
-        await File.WriteAllTextAsync(path, xaml);
+        if (extension == ".txt" || extension == ".pdf")
+        {
+            // Not sure how we will save as pdf for now, so this is temporary for .pdf
+            content = rtb.FlowDocument.Text;
+        }
+        else if (extension == ".docx")
+        {
+            rtb.SaveWordDoc(path);
+            return;
+        }
+        else
+        {
+            content = rtb.SaveXamlString();
+        }
+
+        await File.WriteAllTextAsync(path, content);
     }
     
     public static async Task<IStorageFile?> OpenFileAsync()

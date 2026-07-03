@@ -16,6 +16,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
+        RecentDocumentsViewModel.Load();
     }
     
     [RelayCommand]

@@ -4,7 +4,6 @@ using Quill.Models;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using System.Linq;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Quill.ViewModels;
@@ -24,7 +23,7 @@ public partial class EditorViewModel : ViewModelBase
         set
         {
             SaveState.Directory = value;
-            OnPropertyChanged(nameof(SaveDirectory));
+            OnPropertyChanged();
         }
     } 
 
@@ -43,10 +42,10 @@ public partial class EditorViewModel : ViewModelBase
     };
 
     [ObservableProperty]
-    private string? selectedFont;
+    private string? _selectedFont;
 
     [ObservableProperty]
-    private double selectedFontSize = 12;
+    private double _selectedFontSize = 12;
 
     [RelayCommand]
     public void ToggleSavePanel()
@@ -71,7 +70,7 @@ public partial class EditorViewModel : ViewModelBase
         LoadFonts();
     }
 
-    private EditorViewModel(TextDocument doc, string filePath)
+    private EditorViewModel(TextDocument doc)
     {
         TextDoc = doc;
     }
@@ -82,9 +81,9 @@ public partial class EditorViewModel : ViewModelBase
     {
         var doc = await FileService.OpenAsync(filePath);
         
-        RecentDocumentsViewModel.Add(doc); // add to recent doc to show on homescreen
+        await RecentDocumentsViewModel.Add(doc); // add to recent doc to show on homescreen
         
-        return new EditorViewModel(doc, filePath);
+        return new EditorViewModel(doc);
     }
 
 
@@ -121,7 +120,7 @@ public partial class EditorViewModel : ViewModelBase
             Directory = SaveState.Directory
         };
         
-        RecentDocumentsViewModel.Add(TextDoc!);
+        await RecentDocumentsViewModel.Add(TextDoc);
 
         await FileService.SaveAsync(SaveState.FilePath!, TextDoc);
         

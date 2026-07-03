@@ -10,7 +10,7 @@ namespace Quill.Models;
 
 public static class FileService
 {
-    private static JsonSerializerOptions serializerWriteOptions = new() // Initializaing serializer options is costly, better to reuse according to docs
+    private static JsonSerializerOptions _serializerWriteOptions = new() // Initializaing serializer options is costly, better to reuse according to docs
     {
         WriteIndented = true
     };
@@ -29,7 +29,7 @@ public static class FileService
 
     public static async Task SaveAsync(string path, TextDocument document)
     {
-        var json = JsonSerializer.Serialize(document, serializerWriteOptions);
+        var json = JsonSerializer.Serialize(document, _serializerWriteOptions);
 
         await File.WriteAllTextAsync(path, json);
     }

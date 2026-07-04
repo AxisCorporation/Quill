@@ -53,7 +53,6 @@ This is the middle layer between the View and the Model. It takes raw data from 
 - Zain Farhan: Project Lead
 - Daud: Head Developer
 - Isaac: Developer
-- Kalsoom: Developer
 
 ## Timeline
 The Development Cycles have been divided into various Stages.
@@ -71,11 +70,19 @@ Task Set 2:
 Task Set 3:
 - [X] Basic File Format - Zain Farhan
 - [X] Recent Documents - Isaac
-- [ ] Document Text Formatting - Daud
-- [ ] Styles - Kalsoom
+- [ ] ~~Document Text Formatting - Daud~~
+- [ ] ~~Styles - Kalsoom~~
 
 Task Set 4:
-- [ ] UI Polish - Isaac
+- [ ] ~~UI Polish - Isaac~~
+- [X] Rich Text Bare - Daud
+- [ ] ~~Styles - Zain~~
+
+Task Set 5:
+- [ ] UI Polish - Zain
+- [ ] Styles - Zain
+- [ ] User Settings - Isaac
+- [ ] PDF Export - Daud
 
 ## Guidelines
 
@@ -101,7 +108,7 @@ Below are the guidelines for the code of conduct we recommend that you follow, t
 ```
 - Avoid leaving large chunks of code commented out, if you wish to leave a backup of your previous code consider creating a separate file locally.
 - Avoid ambiguous names (e.g. `Backup2.txt`).
-- Unreasonable requests (e.g. a merge request consisting of more than a 1,000 lines) will not be humoured.
+- Unreasonable requests (e.g. a merge request consisting of more than a few thousand lines) will not be humoured.
 
 A failure to comply may result in your code be rejected or even being taken out of the development team based on how egregious the non-compliance is.
 

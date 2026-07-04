@@ -11,14 +11,14 @@ public partial class HomeViewModel : ViewModelBase
     // This is redundant and only acts as a placeholder rn
     [ObservableProperty]
     private string _debug  = "Debug Statement!";
+    //not store docs directly but shares stored so ui automatically in sync
+    public ObservableCollection<TextDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
 
     public HomeViewModel()
     {
+        RecentDocumentsViewModel.Load();
     }
     
-    // Will change from string to a proper datatype later
-    public ObservableCollection<string> RecentDocuments { get; } = new() { "Doc 1", "Doc 2", "Doc 3" };
-
     [RelayCommand]
     private static void NewFile()
     {
@@ -37,5 +37,22 @@ public partial class HomeViewModel : ViewModelBase
 
         var path = file.Path.LocalPath;
         MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
-    }    
+    }
+    
+    [RelayCommand]
+    private async Task OpenRecentDocument(TextDocument document)
+    {
+        if (document is null)
+            return;
+
+        var path = document.FilePath;
+
+        if (path == null)
+        {
+            // Handle missing file
+            return;
+        }
+
+        MainWindowViewModel.Navigate(await EditorViewModel.CreateAsync(path));
+    }
 }

@@ -64,19 +64,15 @@
                   ColumnSpacing="12">
                 
                 <StackPanel Grid.Column="0" Spacing="4" Margin="4">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <ComboBox Width="140">
-                            <ComboBoxItem Content="Arial"/>
-                            <ComboBoxItem Content="Calibre"/>
-                            <ComboBoxItem Content="Times New Roman"/>
-                        </ComboBox>
+					<StackPanel Orientation="Horizontal" Margin="2">
+						<ComboBox Width="180"
+		                          ItemsSource="{Binding AvailableFonts}"
+		                          SelectedItem="{Binding SelectedFont}" />
 
-                        <ComboBox Width="60">
-                            <ComboBoxItem Content="10"/>
-                            <ComboBoxItem Content="12"/>
-                            <ComboBoxItem Content="14"/>
-                        </ComboBox>
-                    </StackPanel>
+						<ComboBox Width="80"
+                                  ItemsSource="{Binding FontSizes}"
+                                  SelectedItem="{Binding SelectedFontSize}"/>
+					</StackPanel>
                     
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <ToggleButton Content="B"
@@ -179,8 +175,11 @@
         </Border>
         
         <Border Grid.Row="2" Background="#708090" Margin="300,20" CornerRadius="5">
-            <avrtb:RichTextBox x:Name="MainRTB" Background="Transparent" TextInput="OnTextChanged">
-            </avrtb:RichTextBox>
+            <TextBox Classes="Editor" Name="EditorTextBox" IsEnabled="{Binding EditingEnabled}" Text="{Binding TextDoc.Content}"
+			FontFamily="{Binding SelectedFont}"  FontSize="{Binding SelectedFontSize}"
+            AcceptsReturn="True" AcceptsTab="True" TextChanged="OnTextChanged"
+            Margin="50, 50" TextWrapping="WrapWithOverflow">
+            </TextBox>
         </Border>
 
     </Grid>

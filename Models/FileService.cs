@@ -11,7 +11,7 @@ namespace Quill.Models;
 
 public static class FileService
 {
-    private static JsonSerializerOptions serializerWriteOptions = new() // Initializaing serializer options is costly, better to reuse according to docs
+    private static JsonSerializerOptions _serializerWriteOptions = new() // Initializaing serializer options is costly, better to reuse according to docs
     {
         WriteIndented = true
     };
@@ -33,23 +33,7 @@ public static class FileService
 
     public static async Task SaveAsync(string path, RichTextBox rtb)
     {
-        string content;
-        string extension = Path.GetExtension(path);
-
-        if (extension == ".txt" || extension == ".pdf")
-        {
-            // Not sure how we will save as pdf for now, so this is temporary for .pdf
-            content = rtb.FlowDocument.Text;
-        }
-        else if (extension == ".docx")
-        {
-            rtb.SaveWordDoc(path);
-            return;
-        }
-        else
-        {
-            content = rtb.SaveXamlString();
-        }
+        var json = JsonSerializer.Serialize(document, _serializerWriteOptions);
 
         await File.WriteAllTextAsync(path, content);
     }

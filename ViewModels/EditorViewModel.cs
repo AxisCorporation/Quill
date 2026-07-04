@@ -1,8 +1,10 @@
-using System.Threading.Tasks;
-using AvRichTextBox;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
+using System.Collections.ObjectModel;
+using Avalonia.Media;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Quill.ViewModels;
 
@@ -15,13 +17,37 @@ public partial class EditorViewModel : ViewModelBase
 
     [ObservableProperty]
     public partial SaveAsState SaveState { get; set; } = new();
+    
+    public string? SaveDirectory
+    { 
+        get => SaveState.Directory; 
+        set
+        {
+            SaveState.Directory = value;
+            OnPropertyChanged();
+        }
+    } 
+
 
     [ObservableProperty]
     public partial bool EditingEnabled { get; private set;} = true;
     
     [ObservableProperty]
-    public partial bool ShowSavePanel { get; set; } 
-    
+    public partial bool ShowSavePanel { get; set; }
+
+    public ObservableCollection<string> AvailableFonts { get; } = new();
+
+    public ObservableCollection<double> FontSizes { get; } = new()
+    {
+        10, 12, 14, 16, 18, 20, 24, 28, 32
+    };
+
+    [ObservableProperty]
+    private string? _selectedFont;
+
+    [ObservableProperty]
+    private double _selectedFontSize = 12;
+
     [RelayCommand]
     public void ToggleSavePanel()
     {
@@ -40,7 +66,10 @@ public partial class EditorViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     public partial bool FileChanged { get; set; } = false; 
 
-    public EditorViewModel() {}
+    public EditorViewModel() 
+    {
+        LoadFonts();
+    }
 
     private EditorViewModel(TextDocument doc)
     {
@@ -52,6 +81,8 @@ public partial class EditorViewModel : ViewModelBase
     public static async Task<EditorViewModel> CreateAsync(string filePath)
     {
         var doc = await FileService.OpenAsync(filePath);
+        
+        await RecentDocumentsViewModel.Add(doc); // add to recent doc to show on homescreen
         
         return new EditorViewModel(doc);
     }
@@ -89,6 +120,8 @@ public partial class EditorViewModel : ViewModelBase
             Extension = $".{SaveState.FileExtension}",
             Directory = SaveState.Directory
         };
+        
+        await RecentDocumentsViewModel.Add(TextDoc);
 
         await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!);
         
@@ -96,6 +129,18 @@ public partial class EditorViewModel : ViewModelBase
 
         FileChanged = false;
         ToggleSavePanel();
+    }
+
+    private void LoadFonts()
+    {
+        var fonts = FontManager.Current.SystemFonts
+            .Select(f => f.Name)
+            .OrderBy(n => n);
+
+        foreach (var font in fonts)
+            AvailableFonts.Add(font);
+
+        SelectedFont = AvailableFonts.FirstOrDefault();
     }
 
 }

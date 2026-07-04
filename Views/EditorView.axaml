@@ -1,4 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:avrichtextbox="using:AvRichTextBox"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +8,8 @@
              xmlns:m="clr-namespace:Quill.Models"
              x:Class="Quill.Views.EditorView"
              x:DataType="vm:EditorViewModel"
-             d:DataContext="{d:DesignInstance vm:EditorViewModel}">
+             d:DataContext="{d:DesignInstance vm:EditorViewModel}"
+             xmlns:avrtb="using:AvRichTextBox">
 
 
     <UserControl.Styles>
@@ -142,7 +144,7 @@
             MaxWidth="800">
             <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="50" Margin= "30,50">
                 <TextBox Classes="FilePath" Grid.Row="0" PlaceholderText="Enter file name.." Text="{Binding SaveState.FileName}"/>
-                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding SaveDirectory}" IsReadOnly="true" IsHitTestVisible="false"/>
+                <TextBox Grid.Row="1" PlaceholderText="Choose a folder.." Text="{Binding SaveState.Directory}" IsReadOnly="true" IsHitTestVisible="false"/>
                 <Button Grid.Row="2" Content="Choose Folder" Command="{Binding ChooseFolderCommand}" CommandParameter="{Binding $parent[UserControl]}"/>
         
                 <StackPanel Grid.Row="3">
@@ -179,5 +181,6 @@
             Margin="50, 50" TextWrapping="WrapWithOverflow">
             </TextBox>
         </Border>
+
     </Grid>
 </UserControl>

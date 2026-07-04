@@ -1,12 +1,16 @@
 using System.IO;
 using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
 namespace Quill.Models;
 
-public class SaveAsState
+public partial class SaveAsState : ObservableObject
 {
-    public string FileName { get; set; } = "Untitled";
-    public string? Directory { get; set; }
-    public FileType FileExtension { get; set; } = FileType.wrt;
+    [ObservableProperty]
+    public partial string FileName { get; set; } = "Untitled";
+    [ObservableProperty]
+    public partial string? Directory { get; set; }
+    [ObservableProperty]
+    public partial FileType FileExtension { get; set; } = FileType.wrt;
 
     [JsonIgnore]
     public string? FilePath

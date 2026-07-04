@@ -10,10 +10,11 @@ namespace Quill.ViewModels;
 
 public partial class EditorViewModel : ViewModelBase
 {
-    // Feel free to change it to properties to make it work with VS Code, I don't think it matters
+    public RichTextBox? RichTextBox { private get; set => field ??= value; }
+
     [ObservableProperty]
     public partial TextDocument TextDoc { get; set; } = new();
-    
+
     [ObservableProperty]
     public partial SaveAsState SaveState { get; set; } = new();
     
@@ -93,7 +94,8 @@ public partial class EditorViewModel : ViewModelBase
         if (TextDoc.FilePath is null)
             return; 
 
-        await FileService.SaveAsync(TextDoc.FilePath, TextDoc);
+        await FileService.SaveAsync(TextDoc.FilePath, RichTextBox!);
+
         FileChanged = false;
     }
     
@@ -105,7 +107,7 @@ public partial class EditorViewModel : ViewModelBase
         if (path is null)
             return;
 
-        SaveDirectory = path;
+        SaveState.Directory = path;
         SaveNewFileCommand.NotifyCanExecuteChanged();
     }
     
@@ -115,14 +117,13 @@ public partial class EditorViewModel : ViewModelBase
         TextDoc = new()
         {
             FileName = SaveState.FileName,
-            Content =  TextDoc.Content,
             Extension = $".{SaveState.FileExtension}",
             Directory = SaveState.Directory
         };
         
         await RecentDocumentsViewModel.Add(TextDoc);
 
-        await FileService.SaveAsync(SaveState.FilePath!, TextDoc);
+        await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!);
         
         SaveState.Directory = null;
 

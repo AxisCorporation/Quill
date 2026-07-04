@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using AvRichTextBox;
 
 namespace Quill.Models;
 
@@ -20,18 +21,21 @@ public static class FileService
     
     public static async Task<TextDocument> OpenAsync(string path)
     {
-        string json = await File.ReadAllTextAsync(path);
+        TextDocument textDoc = new()
+        {
+            FileName = Path.GetFileNameWithoutExtension(path),
+            Extension = Path.GetExtension(path),
+            Directory = Path.GetDirectoryName(path)
+        };
 
-        var doc = JsonSerializer.Deserialize<TextDocument>(json);
-
-        return doc ?? new TextDocument();
+        return textDoc;
     }
 
-    public static async Task SaveAsync(string path, TextDocument document)
+    public static async Task SaveAsync(string path, RichTextBox rtb)
     {
         var json = JsonSerializer.Serialize(document, _serializerWriteOptions);
 
-        await File.WriteAllTextAsync(path, json);
+        await File.WriteAllTextAsync(path, content);
     }
     
     public static async Task<IStorageFile?> OpenFileAsync()

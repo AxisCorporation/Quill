@@ -33,7 +33,23 @@ public static class FileService
 
     public static async Task SaveAsync(string path, RichTextBox rtb)
     {
-        var json = JsonSerializer.Serialize(document, _serializerWriteOptions);
+        string content;
+        string extension = Path.GetExtension(path);
+
+        if (extension == ".txt" || extension == ".pdf")
+        {
+            // Not sure how we will save as pdf for now, so this is temporary for .pdf
+            content = rtb.FlowDocument.Text;
+        }
+        else if (extension == ".docx")
+        {
+            rtb.SaveWordDoc(path);
+            return;
+        }
+        else
+        {
+            content = rtb.SaveXamlString();
+        }
 
         await File.WriteAllTextAsync(path, content);
     }

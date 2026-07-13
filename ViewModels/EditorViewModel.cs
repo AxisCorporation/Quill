@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Media;
 using System.Linq;
 using System.Threading.Tasks;
+using AvRichTextBox;
 
 namespace Quill.ViewModels;
 

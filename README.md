@@ -51,8 +51,8 @@ This is the middle layer between the View and the Model. It takes raw data from 
 
 ## Contributors
 - Zain Farhan: Project Lead
-- Daud: Head Developer
 - Isaac: Developer
+- Daud: Developer
 
 ## Timeline
 The Development Cycles have been divided into various Stages.
@@ -82,7 +82,7 @@ Task Set 5:
 - [ ] UI Polish - Zain
 - [ ] Styles - Zain
 - [ ] User Settings - Isaac
-- [ ] PDF Export - Daud
+- [ ] ~~PDF Export - Daud~~
 
 ## Guidelines
 

@@ -15,17 +15,14 @@ public partial class EditorView : UserControl
     {
         InitializeComponent();
 
-        Loaded += async (a, sender) => 
+        Loaded += (_, _) =>
         {
-            var vm =  (EditorViewModel) DataContext!;
-            vm.RichTextBox = MainRTB;
+            var vm = (EditorViewModel) DataContext!;
+
+            MainRTB.FlowDocument = vm.TextDoc.Content;
+
+            MainRTB.FlowDocument.Selection.CollapseToEnd();
             
-            if (!string.IsNullOrWhiteSpace(vm.TextDoc.FilePath))
-            {
-                await LoadFile(MainRTB, vm.TextDoc.FilePath);
-                MainRTB.FlowDocument.Selection.CollapseToEnd();
-            }
-            MainRTB.TextInput += OnTextChanged;
         };
     }
 
@@ -37,34 +34,5 @@ public partial class EditorView : UserControl
         }
     }
 
-    public async Task LoadFile(RichTextBox richTextBox, string filePath)
-    {
-        string extension = Path.GetExtension(filePath);
 
-        if (extension == ".txt" || extension == ".pdf")
-        {
-            richTextBox.FlowDocument.Blocks.RemoveAt(0);
-
-            var para = new Paragraph(richTextBox.FlowDocument);
-            para.Inlines.Add(new EditableRun(await File.ReadAllTextAsync(filePath)));
-
-            richTextBox.FlowDocument.Blocks.Add(para);
-        }
-        else if (extension == ".docx")
-        {
-            richTextBox.LoadWordDoc(filePath);
-        }
-        else
-        {
-            richTextBox.LoadXaml(filePath);
-        }
-
-        // Dispatcher.UIThread.Post() schedules a task to be done after all tasks in the queue complete
-        // This means that this function "waits" until all other UI tasks (loading and initializing fields) are complete before executing
-        Dispatcher.UIThread.Post(() =>
-        {
-            MainRTB.FlowDocument.Select(0, 0);
-        });
-
-    }
 }

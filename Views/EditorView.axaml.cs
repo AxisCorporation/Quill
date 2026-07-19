@@ -17,11 +17,11 @@ public partial class EditorView : UserControl
 
         Loaded += (_, _) =>
         {
-            var vm = (EditorViewModel) DataContext!;
-
-            MainRTB.FlowDocument = vm.TextDoc.Content;
-
-            MainRTB.FlowDocument.Selection.CollapseToEnd();
+            // var vm = (EditorViewModel) DataContext!;
+            //
+            // MainRTB.FlowDocument = vm.TextDoc.Content;
+            //
+            // MainRTB.FlowDocument.Selection.CollapseToEnd();
             
         };
     }

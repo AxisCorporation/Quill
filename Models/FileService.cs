@@ -19,8 +19,13 @@ public static class FileService
     public static TopLevel MainWindow => (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!
                                          .MainWindow!;
 
-    public static async Task SaveAsync(string path, RichTextBox rtb)
+    public static async Task SaveAsync(string path, FlowDocument document)
     {
+        var rtb = new RichTextBox
+        {
+            FlowDocument = document
+        };
+
         string content;
         string extension = Path.GetExtension(path);
 

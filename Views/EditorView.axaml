@@ -175,7 +175,7 @@
         </Border>
         
         <Border Grid.Row="2" Background="#708090" Margin="300,20" CornerRadius="5">
-            <avrtb:RichTextBox x:Name="MainRTB" Background="Transparent" TextInput="OnTextChanged">
+            <avrtb:RichTextBox x:Name="MainRTB" FlowDocument="{Binding TextDoc.Content}" Background="Transparent" TextInput="OnTextChanged">
             </avrtb:RichTextBox>
         </Border>
 

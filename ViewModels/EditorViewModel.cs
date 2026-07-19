@@ -1,9 +1,11 @@
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AvRichTextBox;
 
@@ -75,6 +77,7 @@ public partial class EditorViewModel : ViewModelBase
     private EditorViewModel(TextDocument doc)
     {
         TextDoc = doc;
+        LoadFonts();
     }
 
     
@@ -95,7 +98,7 @@ public partial class EditorViewModel : ViewModelBase
         if (TextDoc.FilePath is null)
             return; 
 
-        await FileService.SaveAsync(TextDoc.FilePath, RichTextBox!);
+        await FileService.SaveAsync(TextDoc.FilePath, TextDoc.Content);
 
         FileChanged = false;
     }
@@ -115,16 +118,16 @@ public partial class EditorViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(IsSaveDirectorySet))]
     private async Task SaveNewFileAsync()
     {        
-        TextDoc = new()
-        {
-            FileName = SaveState.FileName,
-            Extension = $".{SaveState.FileExtension}",
-            Directory = SaveState.Directory
-        };
+        // TextDoc = new()
+        // {
+        //     FileName = SaveState.FileName,
+        //     Extension = $".{SaveState.FileExtension}",
+        //     Directory = SaveState.Directory
+        // };
         
         await RecentDocumentsViewModel.Add(TextDoc);
 
-        await FileService.SaveAsync(SaveState.FilePath!, RichTextBox!);
+        await FileService.SaveAsync(SaveState.FilePath!, TextDoc.Content!);
         
         SaveState.Directory = null;
 

@@ -18,21 +18,14 @@ public static class FileService
     
     public static TopLevel MainWindow => (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!
                                          .MainWindow!;
-    
-    public static async Task<TextDocument> OpenAsync(string path)
+
+    public static async Task SaveAsync(string path, FlowDocument document)
     {
-        TextDocument textDoc = new()
+        var rtb = new RichTextBox
         {
-            FileName = Path.GetFileNameWithoutExtension(path),
-            Extension = Path.GetExtension(path),
-            Directory = Path.GetDirectoryName(path)
+            FlowDocument = document
         };
 
-        return textDoc;
-    }
-
-    public static async Task SaveAsync(string path, RichTextBox rtb)
-    {
         string content;
         string extension = Path.GetExtension(path);
 
@@ -59,17 +52,48 @@ public static class FileService
         if (MainWindow is null)
             return null;
 
-        var result = await MainWindow.StorageProvider
-            .OpenFilePickerAsync(
-                new FilePickerOpenOptions
-                {
-                    Title = "Choose a file",
-                    AllowMultiple = false
-                });
+        var result =
+            await MainWindow.StorageProvider
+                .OpenFilePickerAsync(
+                    new FilePickerOpenOptions
+                    {
+                        Title = "Choose a file",
+                        AllowMultiple = false,
+                        FileTypeFilter =
+                        [
+                            new FilePickerFileType("Quill Document")
+                            {
+                                Patterns = ["*.wrt"]
+                            }
+                        ]
+                    });
 
         return result.Count > 0
             ? result[0]
             : null;
+    }
+    
+    public static async Task<TextDocument> OpenAsync(string path)
+    {
+        var document = new TextDocument
+        {
+            FileName =
+                Path.GetFileNameWithoutExtension(path),
+
+            Extension =
+                Path.GetExtension(path),
+
+            Directory =
+                Path.GetDirectoryName(path)
+        };
+
+        var tempEditor = new RichTextBox();
+
+        tempEditor.LoadXaml(path);
+
+        document.Content = tempEditor.FlowDocument;
+
+        return document;
     }
     
     public static async Task<string?> PickFolderAsync()

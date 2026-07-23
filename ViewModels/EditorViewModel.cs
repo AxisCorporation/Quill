@@ -1,19 +1,23 @@
-using System;
+
+using Avalonia.Media;
+using AvRichTextBox;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
+using Quill.ViewModels;
+using System;
 using System.Collections.ObjectModel;
-using Avalonia.Media;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AvRichTextBox;
 
 namespace Quill.ViewModels;
 
 public partial class EditorViewModel : ViewModelBase
 {
-    public RichTextBox? RichTextBox { private get; set => field ??= value; }
+    private FontFamily _currentFont = new("Meiryo");
+    private double _currentFontSize = 12;
+    public RichTextBox? RichTextBox { get; set; }
 
     [ObservableProperty]
     public partial TextDocument TextDoc { get; set; } = new();
@@ -48,8 +52,25 @@ public partial class EditorViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedFont;
 
+
+    partial void OnSelectedFontChanged(string? value)
+    {
+        if (value is null)
+            return;
+
+        _currentFont = new FontFamily(value);
+
+        ApplyFontToSelection();
+    }
+
     [ObservableProperty]
     private double _selectedFontSize = 12;
+
+
+    partial void OnSelectedFontSizeChanged(double value)
+    {
+        ApplyFontSize();
+    }
 
     [RelayCommand]
     public void ToggleSavePanel()
@@ -145,6 +166,56 @@ public partial class EditorViewModel : ViewModelBase
             AvailableFonts.Add(font);
 
         SelectedFont = AvailableFonts.FirstOrDefault();
+    }
+
+    private void ApplyFontSize()
+    {
+        if (RichTextBox is null)
+            return;
+
+        _currentFontSize = SelectedFontSize;
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontSizeProperty,
+            _currentFontSize
+        );
+    }
+
+    private void ApplyFontToSelection()
+    {
+        if (RichTextBox is null)
+            return;
+
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontFamilyProperty,
+            _currentFont
+        );
+    }
+
+
+    public void PreviewFont(string font)
+    {
+        if (RichTextBox is null)
+            return;
+
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontFamilyProperty,
+            new FontFamily(font)
+        );
+    }
+
+    public void PreviewSize(double size)
+    {
+        if (RichTextBox is null)
+            return;
+
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontSizeProperty,
+            size
+        );
     }
 
 }

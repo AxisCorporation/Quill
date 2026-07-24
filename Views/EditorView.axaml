@@ -93,13 +93,13 @@
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal" Margin="2">
-                        <ToggleButton Content="B"
+                        <Button Content="B" Command="{Binding ToggleBoldCommand}"
                                       FontWeight="Bold"/>
 
-                        <ToggleButton Content="I"
+                        <Button Content="I" Command="{Binding ToggleItalicCommand}"
                                       FontStyle="Italic"/>
 
-                        <ToggleButton Content="U"/>
+                        <Button Content="U" Command="{Binding ToggleUnderlineCommand}" />
                     </StackPanel>
                         
 
@@ -121,7 +121,7 @@
 
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
 
                         <Button Content="⯇"/>
@@ -143,16 +143,34 @@
                 <Border Grid.Column="3" Width="1"
                         Background="#606060"
                         Margin="4"/>
+
+                <Grid Grid.Column="4"
+                            RowDefinitions="*, auto"
+                            Margin="4">
+                    
+                    <StackPanel Margin="4" Spacing="4" VerticalAlignment="Center">
+                        <ComboBox Width="200" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                ItemsSource="{Binding Styles}"
+                                SelectedItem="{Binding SelectedStyle}">
+
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                    </StackPanel>
+
+                    <TextBlock Text="Paragraph"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                FontSize="11"
+                                Padding="0, 0, 0, 0"
+                                Opacity="0.7"/>
+
+                </Grid>
                 
                 <!-- Styles -->
-                <StackPanel Grid.Column="4" Margin="4" Spacing="4" VerticalAlignment="Top">
-                    <ComboBox Width="200" HorizontalAlignment="Center">
-                        <ComboBoxItem Content="Title"/>
-                        <ComboBoxItem Content="Heading 1"/>
-                        <ComboBoxItem Content="Heading 2"/>
-                    </ComboBox>
-
-                </StackPanel>
             </Grid>
         </Border>
 

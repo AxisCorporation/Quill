@@ -12,41 +12,6 @@ public class TextDocument
     public string Extension { get; set; } = ".wrt";
     public string? Directory { get; set; }
     
-    public ObservableCollection<DocumentStyle> Styles { get; }
-        =
-        [
-            new()
-            {
-                Name = "Normal"
-            },
-
-            new()
-            {
-                Name = "Heading 1",
-                FontSize = 32,
-                FontWeight = FontWeight.Bold
-            },
-
-            new()
-            {
-                Name = "Heading 2",
-                FontSize = 24,
-                FontWeight = FontWeight.Bold
-            },
-
-            new()
-            {
-                Name = "Quote",
-                FontStyle = FontStyle.Italic
-            },
-
-            new()
-            {
-                Name = "Code",
-                FontFamily = new FontFamily("Consolas")
-            }
-        ];
-    
     // actual contents
     public FlowDocument Content { get; set; } = new();
 

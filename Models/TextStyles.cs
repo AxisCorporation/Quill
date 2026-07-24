@@ -8,7 +8,7 @@ public class DocumentStyle
     public string Name { get; set; } = "";
 
     public FontFamily FontFamily { get; set; }
-        = new("Meiryo");
+        = new("Arial");
 
     public double FontSize { get; set; } = 16;
 

@@ -4,7 +4,7 @@ using AvRichTextBox;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
-using Quill.ViewModels;
+using Avalonia.Controls.Documents;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -52,6 +52,104 @@ public partial class EditorViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedFont;
 
+    [ObservableProperty]
+    private DocumentStyle? _selectedStyle;
+
+    public ObservableCollection<DocumentStyle> Styles { get; } =
+    [
+        new()
+        {
+            Name = "Normal"
+        },
+
+        new()
+        {
+            Name = "Heading 1",
+            FontSize = 32,
+            FontWeight = FontWeight.Bold
+        },
+
+        new()
+        {
+            Name = "Heading 2",
+            FontSize = 24,
+            FontWeight = FontWeight.Bold
+        },
+
+        new()
+        {
+            Name = "Quote",
+            FontStyle = FontStyle.Italic
+        },
+
+        new()
+        {
+            Name = "Code",
+            FontFamily = new FontFamily("Consolas")
+        }
+    ];
+
+    partial void OnSelectedStyleChanged(DocumentStyle? value)
+    {
+        if (RichTextBox is null)
+            return;
+
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontFamilyProperty,
+            value!.FontFamily
+        );
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontSizeProperty,
+            value!.FontSize
+        );
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontWeightProperty,
+            value!.FontWeight
+        );
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontStyleProperty,
+            value!.FontStyle
+        );
+
+        // Do alignment
+    }
+
+    [RelayCommand]
+    private void ToggleBold()
+    {
+        if (RichTextBox is null)
+            return;
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontWeightProperty,
+            FontWeight.Bold);
+    }
+
+    [RelayCommand]
+    private void ToggleItalic()
+    {
+        if (RichTextBox is null)
+            return;
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Avalonia.Controls.Documents.TextElement.FontStyleProperty,
+            FontStyle.Italic);
+    }
+
+    [RelayCommand]
+    private void ToggleUnderline()
+    {
+        if (RichTextBox is null)
+            return;
+
+        RichTextBox.FlowDocument.Selection.ApplyFormatting(
+            Inline.TextDecorationsProperty,
+            TextDecorationLocation.Underline);
+    }
 
     partial void OnSelectedFontChanged(string? value)
     {

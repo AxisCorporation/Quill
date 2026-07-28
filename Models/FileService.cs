@@ -6,6 +6,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using AvRichTextBox;
+using Avalonia.Media;
+
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Quill.Models;
 
@@ -29,10 +34,14 @@ public static class FileService
         string content;
         string extension = Path.GetExtension(path);
 
-        if (extension == ".txt" || extension == ".pdf")
+        if (extension == ".txt")
         {
-            // Not sure how we will save as pdf for now, so this is temporary for .pdf
             content = rtb.FlowDocument.Text;
+        }
+        else if (extension == ".pdf")
+        {
+            SavePdf(path, document);
+        return;
         }
         else if (extension == ".docx")
         {
@@ -45,6 +54,53 @@ public static class FileService
         }
 
         await File.WriteAllTextAsync(path, content);
+    }
+
+    private static void SavePdf(string path, FlowDocument document)
+    {
+        QuestPDF.Settings.License = LicenseType.Community;
+
+    Document.Create(container =>
+    {
+        container.Page(page =>
+        {
+            page.Size(PageSizes.A4);
+            page.Margin(40);
+
+            page.Content().Column(column =>
+            {
+                foreach (var block in document.Blocks)
+                {
+                    if (block is not Paragraph paragraph)
+                        continue;
+
+                    column.Item().Text(text =>
+                    {
+                        foreach (var inline in paragraph.Inlines)
+                        {
+                            if (inline is not EditableRun run)
+                                continue;
+
+                            var span = text.Span(run.Text);
+
+                            span.FontFamily(run.FontFamily.Name);
+                            span.FontSize((float)run.FontSize);
+
+                            if (run.FontWeight == Avalonia.Media.FontWeight.Bold)
+                                span.Bold();
+
+                            if (run.FontStyle == FontStyle.Italic)
+                                span.Italic();
+
+                            if (run.TextDecorations == TextDecorations.Underline)
+                                span.Underline();
+                        }
+                    });
+                }
+            });
+        });
+    })
+    .GeneratePdf(path);
     }
     
     public static async Task<IStorageFile?> OpenFileAsync()

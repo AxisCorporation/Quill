@@ -5,10 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
 using Avalonia.Controls.Documents;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Quill.ViewModels;
@@ -150,6 +148,7 @@ public partial class EditorViewModel : ViewModelBase
             Inline.TextDecorationsProperty,
             TextDecorationLocation.Underline);
     }
+
 
     partial void OnSelectedFontChanged(string? value)
     {

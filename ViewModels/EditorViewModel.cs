@@ -181,11 +181,11 @@ public partial class EditorViewModel : ViewModelBase
     private static void GoToHome() => MainWindowViewModel.Navigate(new HomeViewModel());
     public bool IsSaveDirectorySet() => SaveState.Directory is not null;
     private bool CurrentPathIsSet() => TextDoc.Directory is not null;
-    private bool CanSave() => CurrentPathIsSet() && FileChanged;
+    private bool CanSave() => CurrentPathIsSet() && CanSaveFlag;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-    public partial bool FileChanged { get; set; } = false; 
+    public partial bool CanSaveFlag { get; set; } = false; 
 
     public EditorViewModel() 
     {
@@ -195,6 +195,7 @@ public partial class EditorViewModel : ViewModelBase
     private EditorViewModel(TextDocument doc)
     {
         TextDoc = doc;
+        CanSaveFlag = true;
         LoadFonts();
     }
 
@@ -218,7 +219,6 @@ public partial class EditorViewModel : ViewModelBase
 
         await FileService.SaveAsync(TextDoc.FilePath, TextDoc.Content);
 
-        FileChanged = false;
     }
     
     [RelayCommand]
@@ -249,7 +249,7 @@ public partial class EditorViewModel : ViewModelBase
         
         SaveState.Directory = null;
 
-        FileChanged = false;
+        CanSaveFlag = true;
         ToggleSavePanel();
     }
 

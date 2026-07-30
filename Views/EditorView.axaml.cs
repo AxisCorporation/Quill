@@ -33,10 +33,12 @@ public partial class EditorView : UserControl
 
     private void FontPreviewEntered(object? sender,PointerEventArgs e)
     {
-        if (sender is TextBlock text &&
-            DataContext is EditorViewModel vm)
+        if (sender is TextBlock text && DataContext is EditorViewModel vm)
         {
-            vm.PreviewFont(text.Text);
+            if (text.Text is not null)
+            {     
+                vm.PreviewFont(text.Text);
+            }
         }
     }
 
@@ -51,14 +53,6 @@ public partial class EditorView : UserControl
             {
                 vm.PreviewSize(size);
             }
-        }
-    }
-
-    private void OnTextChanged(object? sender, TextInputEventArgs a)
-    {
-        if (DataContext is EditorViewModel vm)
-        {
-            vm.FileChanged = true;
         }
     }
 

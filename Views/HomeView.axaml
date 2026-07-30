@@ -13,26 +13,17 @@
                 Background="{StaticResource Color.SurfaceAlt}"
                 BorderBrush="{StaticResource Color.SurfaceAlt}"
                 BorderThickness="0,0,1,0">
-            <Grid RowDefinitions="Auto, *, Auto">
-                <!-- Top Section -->
-                <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
-                    <Button Content="New Document"
-                            Command="{Binding NewFileCommand}"
-                            HorizontalContentAlignment="Center"
-                            HorizontalAlignment="Center"></Button>
-                    <Button Content="Open File"
-                            Command="{Binding OpenFileCommand}"
-                            HorizontalContentAlignment="Center"
-                            HorizontalAlignment="Center"></Button>
-                </StackPanel>
-                
-                <!-- Bottom Section -->
-                <StackPanel Grid.Row="2" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
-                    <Button Content="Settings"
-                            HorizontalContentAlignment="Center"
-                            HorizontalAlignment="Center"></Button>
-                </StackPanel>
-            </Grid>
+            <!-- Top Section -->
+            <StackPanel Grid.Row="0" Spacing="10" Margin="10" HorizontalAlignment="Stretch">
+                <Button Content="New Document"
+                        Command="{Binding NewFileCommand}"
+                        HorizontalContentAlignment="Center"
+                        HorizontalAlignment="Center"></Button>
+                <Button Content="Open File"
+                        Command="{Binding OpenFileCommand}"
+                        HorizontalContentAlignment="Center"
+                        HorizontalAlignment="Center"></Button>
+            </StackPanel>
         </Border>
         
         <!-- Main Page -->

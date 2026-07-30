@@ -18,13 +18,13 @@ The aim of Quill is to be a lightweight and simple word processor so people like
 
 ### Objectives
 
-- [ ] Text Engine
+- [X] Text Engine
   - [X] Basic Text
-  - [ ] Rich Text
-  - [ ] Alignment
-  - [ ] Text Styles
-- [ ] Export to PDF file format
-- [ ] Export to DOCX file format
+  - [X] Rich Text
+  - ~~[ ] Alignment~~
+  - [X] Text Styles (Less than Ideal)
+- [X] Export to PDF file format
+- [X] Export to DOCX file format
 
 ### Details 
 
@@ -79,10 +79,14 @@ Task Set 4:
 - [ ] ~~Styles - Zain~~
 
 Task Set 5:
-- [ ] UI Polish - Zain
-- [ ] Styles - Zain
-- [ ] User Settings - Isaac
+- ~~[ ] UI Polish - Zain~~
+- [X] Styles - Zain
+- ~~[ ] User Settings - Isaac~~
 - [ ] ~~PDF Export - Daud~~
+
+Task Set 6:
+- [X] PDF Export - Zain
+- [X] Bug Fixes - Zain
 
 ## Guidelines
 

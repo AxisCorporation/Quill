@@ -90,6 +90,8 @@ public static class RecentDocumentsViewModel
         {
             // TODO: Log the exception if you have a logging system.
             // For now, you could simply ignore it or notify the user.
+
+            Console.WriteLine(ex);
         }
     }
     

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quill.Models;
+using System.IO;
 
 namespace Quill.ViewModels;
 
@@ -10,7 +11,7 @@ public partial class HomeViewModel : ViewModelBase
 {
     // This is redundant and only acts as a placeholder rn
     [ObservableProperty]
-    private string _debug  = "Debug Statement!";
+    private string _debug  = "";
     //not store docs directly but shares stored so ui automatically in sync
     public ObservableCollection<TextDocument> RecentDocuments => RecentDocumentsViewModel.Documents;
 
@@ -50,6 +51,14 @@ public partial class HomeViewModel : ViewModelBase
         if (path == null)
         {
             // Handle missing file
+            return;
+        }
+
+        if (!File.Exists(path))
+        {
+            RecentDocumentsViewModel.Documents.Remove(document);
+            await RecentDocumentsViewModel.SaveAsync();
+            Debug = "That File no longer exist\nDeleting from Recent Documents.";
             return;
         }
 

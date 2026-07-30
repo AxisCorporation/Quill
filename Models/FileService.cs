@@ -143,7 +143,10 @@ public static class FileService
                 Path.GetDirectoryName(path)
         };
 
-        var tempEditor = new RichTextBox();
+        var tempEditor = new RichTextBox
+        {
+            FlowDocument = new FlowDocument()
+        };
 
         tempEditor.LoadXaml(path);
 

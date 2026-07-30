@@ -13,6 +13,7 @@ public class TextDocument
     public string? Directory { get; set; }
     
     // actual contents
+    [JsonIgnore]
     public FlowDocument Content { get; set; } = new();
 
     [JsonIgnore]

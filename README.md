@@ -5,18 +5,18 @@ This Repo is owned and maintained by some CS (mostly LUMS) students for the purp
 
 ## Table of Contends
 
-1. [Introduction](#Introduction)
-2. [Contributors](#Contributors)
-3. [Timeline](#Timeline)
-4. [Guidelines](#Guidelines)
-5. [Naming Schemes](#Naming-Scheme)
-6. [Resources](#Resources)
+1. [Features](#Features)
+2. [Installation](#Installation)
+3. [Development](#Development)
+4. [Contributors](#Contributors)
+5. [Timeline](#Timeline)
+6. [Guidelines](#Guidelines)
+7. [Naming Schemes](#Naming-Scheme)
+8. [Resources](#Resources)
 
-## Introduction
+## Feautures
 
-The aim of Quill is to be a lightweight and simple word processor so people like students, teacher, and office workers can use it to make simple documents. Below are the features that we have potentially planned for the project and those that are currently available.
-
-### Objectives
+The aim of Quill was to be a lightweight and simple word processor so people like students, teacher, and office workers can use it to make simple documents. Below are the features that we have potentially planned for the project and those that are currently available.
 
 - [X] Text Engine
   - [X] Basic Text
@@ -26,7 +26,21 @@ The aim of Quill is to be a lightweight and simple word processor so people like
 - [X] Export to PDF file format
 - [X] Export to DOCX file format
 
-### Details 
+**Note:** Due to unexpected development hurdles, this project is no longer receiving active support.
+
+## Installation
+
+**Note:** Both of the MacOS versions have not been tested **at all** due to none of us owning a mac.
+
+**Precompiled Binaries** can be downloaded at the latest release on the github page.
+
+**Manual Installation** will require the following steps:
+1. Install the .NET 10.X SDK for your respective platform
+2. Clone the git repo
+3. Use the build command for your respective platform (e.g. dotnet publish -c Release -r win-x64 --self-contained true)
+4. The Compiled Binary will be in the /bin/win-x64/publish folder
+
+## Development
 
 Please make sure you have all the required tools installed and ready:
 - Framework: .NET 10.0+ sdk
